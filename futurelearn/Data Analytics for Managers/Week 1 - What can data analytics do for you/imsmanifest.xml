@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest identifier="_5WqTfL4s69X_course_id" version="1.0" xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2" xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd">
+  <metadata>
+    <schema>ADL SCORM</schema>
+    <schemaversion>1.2</schemaversion>
+    <lom xmlns="http://www.imsglobal.org/xsd/imsmd_rootv1p2p1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd">
+      <general>
+        <title>
+          <langstring xml:lang="x-none">SCORM DAM - Week 1 - What can data analytics do for you</langstring>
+        </title>
+      </general>
+      <lifecycle>
+        <version>
+          <langstring xml:lang="x-none">1</langstring>
+        </version>
+        <status>
+          <source>
+            <langstring xml:lang="x-none">LOMv1.0</langstring>
+          </source>
+          <value>
+            <langstring xml:lang="x-none">Final</langstring>
+          </value>
+        </status>
+      </lifecycle>
+      <metametadata>
+        <metadatascheme>ADL SCORM 1.2</metadatascheme>
+      </metametadata>
+      <educational>
+        <typicallearningtime>
+          <datetime>PT0H0M0S</datetime>
+        </typicallearningtime>
+      </educational>
+      <rights>
+        <cost>
+          <source>
+            <langstring xml:lang="x-none">LOMv1.0</langstring>
+          </source>
+          <value>
+            <langstring xml:lang="x-none">yes</langstring>
+          </value>
+        </cost>
+        <copyrightandotherrestrictions>
+          <source>
+            <langstring xml:lang="x-none">LOMv1.0</langstring>
+          </source>
+          <value>
+            <langstring xml:lang="x-none">yes</langstring>
+          </value>
+        </copyrightandotherrestrictions>
+      </rights>
+    </lom>
+  </metadata>
+  <organizations default="SCORM_DAM_-_Week_1_-_What_can_data_analytics_do_for_you_ORG">
+    <organization identifier="SCORM_DAM_-_Week_1_-_What_can_data_analytics_do_for_you_ORG">
+      <title>SCORM DAM - Week 1 - What can data analytics do for you</title>
+      <item identifier="DAM_-_Week_1_-_What_can_data_analytics_do_for_you_SCO" isvisible="true" identifierref="__5WqTfL4s69X_course_id_RES">
+        <title>SCORM DAM - Week 1 - What can data analytics do for you</title>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="__5WqTfL4s69X_course_id_RES" type="webcontent" href="index_lms.html" adlcp:scormtype="sco">
+      <file href="story_content/thumbnail.jpg" />
+      <file href="mobile/6PlBslpGys1_DX3840_DY3840_CX1920_CY1080.png" />
+      <file href="mobile/5iZ4kRTINzK_DX518_DY518_CX303_CY280.png" />
+      <file href="mobile/6hSqQGv1pF7_DX518_DY518_CX303_CY280.png" />
+      <file href="mobile/6KRLmkpdU4y_DX518_DY518_CX303_CY280.png" />
+      <file href="mobile/6jyQx303EP5_DX494_DY494_CX289_CY284.png" />
+      <file href="mobile/6MOehgleICL_DX494_DY494_CX289_CY284.png" />
+      <file href="mobile/6nXlt7wDlCE_DX494_DY494_CX289_CY284.png" />
+      <file href="mobile/5zGGZ1X6R49_DX520_DY520_CX280_CY301.png" />
+      <file href="mobile/6KoW9kUa5gY_DX520_DY520_CX280_CY301.png" />
+      <file href="mobile/6A1z2iKpucQ_DX520_DY520_CX280_CY301.png" />
+      <file href="mobile/6UO6fYsXVNo_DX492_DY492_CX285_CY287.png" />
+      <file href="mobile/65VaJc7wcQ5_DX492_DY492_CX285_CY287.png" />
+      <file href="mobile/68daiZ3vsPu_DX492_DY492_CX285_CY287.png" />
+      <file href="mobile/6ExZeibXD4Y_DX510_DY510_CX298_CY281.png" />
+      <file href="mobile/6f0h7Dl4YRZ_DX508_DY508_CX298_CY281.png" />
+      <file href="mobile/5tG021LFIdf_DX508_DY508_CX298_CY281.png" />
+      <file href="mobile/61DZ5JTwlIU_DX500_DY500_CX292_CY282.png" />
+      <file href="mobile/5rmJrqsLoHg_DX500_DY500_CX292_CY282.png" />
+      <file href="mobile/6Wk2QvULZ3y_DX500_DY500_CX292_CY282.png" />
+      <file href="mobile/6TbyP2A6BL6_DX508_DY508_CX298_CY280.png" />
+      <file href="mobile/5oonjEtX0JF_DX508_DY508_CX298_CY280.png" />
+      <file href="mobile/6dk8MQYDcbn_DX508_DY508_CX298_CY280.png" />
+      <file href="mobile/5ZOs5RV8wXG_DX516_DY516_CX302_CY280.png" />
+      <file href="mobile/5is4DthFitZ_DX516_DY516_CX302_CY280.png" />
+      <file href="mobile/5xYlLvQfKUD_DX516_DY516_CX302_CY280.png" />
+      <file href="mobile/62H7702XsZB_DX100_DY100_CX43_CY75.png" />
+      <file href="mobile/6lMZQsaAWsh_DX98_DY98_CX42_CY73.png" />
+      <file href="mobile/5j23ODfr4Yy_DX1120_DY1120_CX839_CY679.png" />
+      <file href="mobile/6mpt5LGOnPS_DX100_DY100_CX42_CY74.png" />
+      <file href="mobile/6ctAZYszm5Q_DX100_DY100_CX42_CY74.png" />
+      <file href="mobile/5lbQ6JxgJbN_DX80_DY80_CX60_CY60.png" />
+      <file href="mobile/5Yxs8wHgaLV_DX80_DY80_CX60_CY60.png" />
+      <file href="mobile/5Xsw8lbfx0c_DX742_DY742_CX556_CY502.png" />
+      <file href="mobile/625cPe4EVCe_DX1786_DY1786_CX1339_CY483.png" />
+      <file href="mobile/5iYoDI1I4ss_DX1458_DY1458_CX729_CY578.png" />
+      <file href="mobile/6A8AOfXxCMD_DX696_DY696_CX348_CY272.png" />
+      <file href="mobile/6W0NXNaH6Lu_DX588_DY588_CX294_CY266.png" />
+      <file href="mobile/6WrTZp1FzPR_DX1488_DY1488_CX744_CY381.png" />
+      <file href="mobile/5flp0wXUMPO_DX1226_DY1226_CX919_CY490.png" />
+      <file href="mobile/6pSTKI1vcWC_DX728_DY728_CX364_CY324.png" />
+      <file href="mobile/6FPvZUpxq77_DX1568_DY1568_CX1176_CY967.png" />
+      <file href="mobile/5WVofQ8rdLb_DX1350_DY1350_CX1012_CY530.png" />
+      <file href="meta.xml" />
+      <file href="story_content/user.js" />
+      <file href="html5/data/css/output.min.css" />
+      <file href="html5/data/js/5iddBWRs1Sf.js" />
+      <file href="html5/data/js/5jkJIgQvAP4.js" />
+      <file href="html5/data/js/5p6Gvk0IkC9.js" />
+      <file href="html5/data/js/5pOqc2N9Pc2.js" />
+      <file href="html5/data/js/5VJPWluMpWK.js" />
+      <file href="html5/data/js/5ZgAaSLqPRd.js" />
+      <file href="html5/data/js/60VuqwgtNCz.js" />
+      <file href="html5/data/js/617LlkArPFu.js" />
+      <file href="html5/data/js/6FBV7ad6DKi.js" />
+      <file href="html5/data/js/6IAsYNwfOFA.js" />
+      <file href="html5/data/js/6IpOieIqWkD.js" />
+      <file href="html5/data/js/6kJacVWpOmU.js" />
+      <file href="html5/data/js/6SOiZJ6Pt7m.js" />
+      <file href="html5/data/js/data.js" />
+      <file href="html5/data/js/frame.js" />
+      <file href="html5/data/js/paths.js" />
+      <file href="html5/lib/scripts/ds-bootstrap.min.js" />
+      <file href="html5/lib/scripts/ds-frame.desktop.min.js" />
+      <file href="html5/lib/scripts/ds-frame.mobile.min.js" />
+      <file href="html5/lib/scripts/ds-slides.min.js" />
+      <file href="html5/lib/stylesheets/desktop.min.css" />
+      <file href="html5/lib/stylesheets/mobile.min.css" />
+      <file href="html5/lib/stylesheets/mobile-fonts/open-sans-bold.woff" />
+      <file href="html5/lib/stylesheets/mobile-fonts/open-sans-light.woff" />
+      <file href="html5/lib/stylesheets/mobile-fonts/open-sans-regular.woff" />
+      <file href="analytics-frame.html" />
+      <file href="story.html" />
+      <file href="index_lms.html" />
+      <file href="lms/AICCComm.html" />
+      <file href="lms/blank.html" />
+      <file href="lms/browsersniff.js" />
+      <file href="lms/goodbye.html" />
+      <file href="lms/scormdriver.js" />
+    </resource>
+  </resources>
+</manifest>
