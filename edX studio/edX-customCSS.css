@@ -2,6 +2,10 @@
     display: none !important;
 }
 
+ul, ol {
+    padding-left: 2.074em !important;
+}
+
 .bigQuestion {
     border-width: 4px 0;
     border-style: solid;
