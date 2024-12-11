@@ -1,0 +1,44 @@
+/* Image map */
+.pupi-imagemap-container {
+    margin-bottom: 15px;
+}
+.pupi-imagemap-container .pupi-images-container {
+    position: relative;
+    display: table;
+}
+.pupi-imagemap-container .pupi-area-hover-image, .pupi-imagemap-container .pupi-area-selected-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.pupi-imagemap-container .pupi-area-hover-image {
+  z-index: 9;
+}
+.pupi-imagemap-container .pupi-image-marker {
+  position: absolute;
+  margin-left: -18px;
+  margin-top: -48px;
+  width: 36px;
+  height: 48px;
+  z-index: 10;
+}
+@media screen and (max-width: 992px) {
+  .pupi-imagemap-container .pupi-image-marker {
+    width: 24px;
+    height: 32px;
+    margin-left: -12px;
+    margin-top: -32px;
+  }
+}
+.pupi-imagemap-container .pupi-image-marker img.hover-state, .pupi-imagemap-container .pupi-image-marker.active img.hover-state,
+.pupi-imagemap-container .pupi-image-marker.active:hover img.hover-state, .pupi-imagemap-container .pupi-image-marker.active:focus img.hover-state,
+.pupi-imagemap-container .pupi-image-marker:hover img.normal-state, .pupi-imagemap-container .pupi-image-marker:focus img.normal-state,
+.pupi-imagemap-container .pupi-image-marker.active img.normal-state,
+.pupi-imagemap-container .pupi-image-marker img.selected-state {
+    display: none;
+}
+.pupi-imagemap-container .pupi-image-marker.active img.selected-state,
+.pupi-imagemap-container .pupi-image-marker:hover img.hover-state, .pupi-imagemap-container .pupi-image-marker:focus img.hover-state {
+    display: block;
+}
+/* Image map - END */

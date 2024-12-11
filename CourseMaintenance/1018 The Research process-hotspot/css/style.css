@@ -1,0 +1,28 @@
+/* Brain hotspot interaction (5009) */
+.brain-hotspot .pupi-reveal-content {
+    background: #eee;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+.brain-hotspot h2 {
+    margin-top: 0 !important;
+    font-size: 1.6em;
+    padding-bottom: 5px !important;
+    border-bottom: 2px solid #005a9c;
+}
+.brain-hotspot h2 + h3 {
+    margin-top: 10px !important;
+}
+.brain-hotspot h3 {
+    margin-bottom: 5px !important;
+    font-size: 1.2em;
+    margin-top: 25px !important;
+    background: #fff;
+    padding: 5px 10px;
+    border-bottom: 1px solid lightgray;
+    border-top: 1px solid lightgray;
+}
+.brain-hotspot h3 + p {
+    margin-top: 0px;
+}
