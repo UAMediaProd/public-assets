@@ -1,0 +1,1 @@
+This directory is for Micro-credential 3: Teaching Phonics
