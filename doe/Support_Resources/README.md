@@ -1,0 +1,1 @@
+This directory is for the support resources for all micro-credentials.
