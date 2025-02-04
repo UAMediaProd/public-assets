@@ -663,7 +663,7 @@
                             const criterionDescription = criterionCell.querySelector('.criterion-description p').textContent;
                             let maxPointsText = 0;
                             if (criterionCell.querySelector('.criterion-score')) {
-                                let maxPointsText = criterionCell.querySelector('.criterion-score').textContent.match(/\d+/);
+                                maxPointsText = criterionCell.querySelector('.criterion-score').textContent.match(/\d+/);
                             }
                             // const maxPointsText = criterionCell.querySelector('.criterion-score').textContent.match(/\d+/);
                             const maxPoints = maxPointsText ? parseInt(maxPointsText[0]) : 0;
