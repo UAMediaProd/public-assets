@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kangarubric - Canvas Rubric Generator</title>
+    <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c5530;     /* Dark forest green */
+            --secondary-color: #4a7350;  /* Medium forest green */
+            --tertiary-color: #e1eae1; /* Sage */
+            --background-color: #f4f7f4; /* Light sage */
+            --text-color: #1a1f1a;      /* Dark green-gray */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--primary-color);
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            background-color: white;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .drop-zone.dragover {
+            background-color: rgba(0, 122, 255, 0.1);
+            border-color: var(--secondary-color);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+        }
+
+        /* .footer .heart {
+            color: var(--primary-color);
+            font-style: normal;
+        } */
+
+        .drop-zone p {
+            margin: 0;
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        #output {
+            margin-top: 30px;
+        }
+
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .rubric-table th, .rubric-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .rubric-table th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .rubric-table th:first-child {
+            text-align: left;
+            width: 25%;
+        }
+        
+        .rubric-table td:first-child {
+            width: 25%;
+        }
+        
+        .rubric-table td {
+            width: 15%;
+            vertical-align: top;
+        }
+
+        .rubric-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        #debugLog {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #1C1C1E;
+            color: #00FF00;
+            font-family: monospace;
+            border-radius: 6px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .debug-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-bottom: 1px solid #333;
+        }
+
+        .error-text {
+            color: #FF3B30;
+            font-weight: bold;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .criterion-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .criterion-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .criterion-name {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .criterion-score {
+            color: #444;
+        }
+
+        .criterion-description {
+            margin: 8px 0;
+        }
+
+        .criterion-clos {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .instructions {
+            background-color: var(--tertiary-color);
+            border-radius: 6px;
+            padding: 20px 30px;
+            margin: 20px 0;
+            color: var(--text-color);
+        }
+
+        .instructions p {
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .instructions p strong {
+            color: var(--primary-color);
+        }
+
+        /* Style the note paragraph */
+        .instructions .note {
+            background-color: var(--background-color);
+            padding: 15px;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border-radius: 0 6px 6px 0;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px solid var(--primary-color);
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--secondary-color);
+            text-decoration: none;
+            border-bottom: 2px solid var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="roo.svg" alt="Kangaroo Logo" style="display: block; margin: 0 auto; width: 400px; height: 400px;">
+        <h1>Kangarubric</h1>
+        <div class="instructions">
+            <p>Upload a course details Word document to generate Canvas rubric CSV files for each assessment rubric.</p>
+            <p>If you encounter any errors, check that your Word document includes max point percentages and CLOs for all criteria. Save, re-upload and re-run the tool.</p>
+            <p>To upload your CSV file to Canvas, simply navigate to 'Rubrics' in the course navigation menu. <br>Click 'Import Rubric', then upload the file you created with Kangarubric.</p>
+            <p class="note"><strong>Note: </strong>Unfortunately, Canvas <a href="https://community.canvaslms.com/t5/Known-Issues/OPEN-Rubric-imports-cannot-process-decimal-values-for-rating/ta-p/631147" target="_blank">doesn't know how to handle decimal points in rubric CSV files</a>. <br>You'll need to manually change them after your import your rubric.</p>
+            <p>If you're still running into trouble, please contact <a href="mailto:tim.churchward@adelaide.edu.au">Tim Churchward</a>.</p>
+        </div>
+        
+        <div class="drop-zone" id="dropZone">
+            <p>Drop your .docx file here or click to upload</p>
+            <input type="file" id="fileInput" accept=".docx">
+        </div>
+        
+        <div style="text-align: center;">
+            <button id="processButton" disabled>Hop to it!</button>
+        </div>
+
+        <div id="output"></div>
+
+        <div class="footer">
+            Made with <span class="heart">♥</span> for wonderful people like you. Because manually creating Canvas rubrics sucks.
+        </div>
+        <div id="debugLog"></div>
+    </div>
+
+    <script>
+        // Debug mode
+        let DEBUG = false;
+
+        function log(message) {
+            if (DEBUG) {
+                const debugLog = document.getElementById('debugLog');
+                debugLog.style.display = 'block';
+                const entry = document.createElement('div');
+                entry.className = 'debug-entry';
+                entry.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+                debugLog.appendChild(entry);
+                debugLog.scrollTop = debugLog.scrollHeight;
+                console.log(message);
+            }
+        }
+
+        // Helper function to get all text content from a cell
+        function getAllTextContent(cell) {
+            return Array.from(cell.getElementsByTagName('p'))
+                .map(p => p.textContent.trim())
+                .join(' ');
+        }
+
+        // Helper function to process a criterion cell
+        function processCriterionCell(cell, criterionIndex) {
+            // Create container
+            const container = document.createElement('div');
+            container.className = 'criterion-cell';
+
+            // Create header (name and score)
+            const header = document.createElement('div');
+            header.className = 'criterion-header';
+
+            // 1. Set criterion name
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'criterion-name';
+            nameSpan.contentEditable = 'true';
+            nameSpan.textContent = `Criterion ${criterionIndex}`;
+            header.appendChild(nameSpan);
+
+            // 2. Find maximum score
+            let maxScore = null;
+            let scoreText = '';
+            const scoreMatches = getAllTextContent(cell).match(/\(?\d{1,3}%\)?/g);
+            
+            if (!scoreMatches) {
+                scoreText = '(NotFound%)';
+            } else if (scoreMatches.length > 1) {
+                scoreText = '(Error%)';
+            } else {
+                maxScore = parseInt(scoreMatches[0].match(/\d+/)[0]);
+                scoreText = `(${maxScore}%)`;
+            }
+
+            const scoreSpan = document.createElement('span');
+            scoreSpan.className = maxScore ? 'criterion-score' : 'error-text';
+            scoreSpan.contentEditable = 'true';
+            scoreSpan.textContent = scoreText;
+            header.appendChild(scoreSpan);
+            container.appendChild(header);
+
+            // Get all paragraphs for processing
+            const paragraphs = Array.from(cell.getElementsByTagName('p'));
+            let textContent = '';
+
+            // 3. Find CLOs
+            let cloText = '';
+            // Match either a full group of CLOs in brackets, or individual CLO references
+            const cloRegex = /(?:\((?:(?:CLO|CO)\s*\d+(?:\s*[,;&]\s*(?:CLO|CO)?\s*\d+)*)\))|(?:(?:CLO|CO)\s*\d+(?:\s*[,;&]\s*(?:CLO|CO)?\s*\d+)*)/i;
+            const cloMatch = getAllTextContent(cell).match(cloRegex);
+
+            if (cloMatch) {
+                const cloContent = cloMatch[0];
+                // Extract all numbers, handling repeated CLO/CO prefixes
+                const numbers = cloContent
+                    .replace(/\(|\)/g, '') // remove brackets
+                    .split(/[,;&]\s*/) // split on comma, semicolon, or ampersand
+                    .map(part => {
+                        // Extract just the number from each part, ignoring CLO/CO prefix
+                        const numMatch = part.match(/\d+/);
+                        return numMatch ? numMatch[0] : null;
+                    })
+                    .filter(num => num !== null) // remove any failed matches
+                    .sort((a, b) => parseInt(a) - parseInt(b)); // sort numerically
+                
+                cloText = `(CLO ${numbers.join(', ')})`;
+            } else {
+                cloText = '(CLO NotFound)';
+            }
+
+            // 4. Clean up description
+            const descriptionDiv = document.createElement('div');
+            descriptionDiv.className = 'criterion-description';
+
+            // Process each paragraph
+            paragraphs.forEach(p => {
+                const clone = p.cloneNode(true);
+                let text = clone.textContent.trim();
+
+                // 4.1 Remove criterion names
+                text = text.replace(/(?:Criterion|Criteria)\s+\d+/gi, '');
+                
+                // Remove score if found
+                if (maxScore) {
+                    text = text.replace(/\(?\d+%\)?/, '');
+                }
+                
+                // Remove CLOs if found
+                if (cloMatch) {
+                    text = text.replace(cloRegex, '');
+                }
+
+                // 4.2 & 4.3 Skip empty or non-alphanumeric paragraphs
+                if (text && /[a-zA-Z0-9]/.test(text)) {
+                    // Clean up any leftover dashes or whitespace
+                    text = text.replace(/^[-–\s]+/, '').trim();
+                    if (text) {
+                        const p = document.createElement('p');
+                        p.contentEditable = 'true';
+                        p.textContent = text;
+                        descriptionDiv.appendChild(p);
+                    }
+                }
+            });
+
+            container.appendChild(descriptionDiv);
+
+            // Add CLOs
+            const cloDiv = document.createElement('div');
+            cloDiv.className = cloMatch ? 'criterion-clos' : 'error-text';
+            cloDiv.contentEditable = 'true';
+            cloDiv.textContent = cloText;
+            container.appendChild(cloDiv);
+
+            return container;
+        }
+
+        // Initialize the UI
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const processButton = document.getElementById('processButton');
+        let currentFile = null;
+
+        // Event listeners for drag and drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            handleFileSelection(file);
+        });
+
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            handleFileSelection(file);
+        });
+
+        function handleFileSelection(file) {
+            if (file && file.name.endsWith('.docx')) {
+                currentFile = file;
+                dropZone.querySelector('p').textContent = `Selected: ${file.name}`;
+                processButton.disabled = false;
+                log(`File selected: ${file.name}`);
+            } else {
+                alert('Please select a .docx file');
+                log('Invalid file type selected');
+            }
+        }
+
+        processButton.addEventListener('click', async () => {
+            if (!currentFile) {
+                log('No file selected');
+                return;
+            }
+
+            log('Starting file processing');
+            processButton.disabled = true;
+
+            try {
+                const arrayBuffer = await currentFile.arrayBuffer();
+                log('File loaded into memory');
+
+                const result = await mammoth.convertToHtml({ arrayBuffer });
+                log('Document converted to HTML');
+
+                const html = result.value;
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                
+                // Find all tables
+                const tables = tempDiv.getElementsByTagName('table');
+                log(`Found ${tables.length} tables in document`);
+
+                let foundRubricStart = false;
+                let foundContentBreakdown = false;
+                const rubricTables = [];
+
+                for (let i = 0; i < tables.length; i++) {
+                    const table = tables[i];
+                    const cells = table.getElementsByTagName('td');
+                    
+                    if (cells.length === 1) {
+                        const cellText = cells[0].textContent.trim();
+                        log(`Found single-cell table with text: "${cellText}"`);
+                        
+                        if (cellText.includes("Assessment Rubric")) {
+                            foundRubricStart = true;
+                            log('Found Assessment Rubric marker');
+                            continue;
+                        }
+                        
+                        if (cellText.includes("Course Content Breakdown")) {
+                            foundContentBreakdown = true;
+                            log('Found Content Breakdown marker');
+                            break;
+                        }
+                    }
+
+                    if (foundRubricStart && !foundContentBreakdown && cells.length > 1) {
+                        rubricTables.push(table);
+                        log('Found a rubric table');
+                    }
+                }
+
+                // Display the rubrics
+                const output = document.getElementById('output');
+                output.innerHTML = '';
+
+                if (rubricTables.length === 0) {
+                    output.innerHTML = '<p>No rubrics found in the document.</p>';
+                    log('No rubrics found');
+                } else {
+                    log(`Found ${rubricTables.length} rubric tables`);
+                    
+                    // Clear the output before adding new content
+                    output.innerHTML = '';
+                    
+                    rubricTables.forEach((table, index) => {
+                        // Create the rubric container
+                        const rubricDiv = document.createElement('div');
+                        
+                        // Extract assignment name from first row of this table
+                        let assignmentName = '';
+                        const firstRow = table.rows[0];
+                        if (firstRow) {
+                            const paragraphs = firstRow.getElementsByTagName('p');
+                            for (const p of paragraphs) {
+                                const text = p.textContent.trim();
+                                if (text) {
+                                    assignmentName = text;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Add heading
+                        const heading = document.createElement('h2');
+                        heading.textContent = assignmentName || `Rubric ${index + 1}`;
+                        rubricDiv.appendChild(heading);
+
+                        // Create clean table
+                        const cleanTable = document.createElement('table');
+                        cleanTable.className = 'rubric-table';
+                        
+                        // Create header
+                        const thead = document.createElement('thead');
+                        const headerRow = document.createElement('tr');
+                        const headers = ['Criterion', 'High Distinction', 'Distinction', 'Credit', 'Pass', 'Fail'];
+                        
+                        headers.forEach(text => {
+                            const th = document.createElement('th');
+                            th.textContent = text;
+                            headerRow.appendChild(th);
+                        });
+                        
+                        thead.appendChild(headerRow);
+                        cleanTable.appendChild(thead);
+                        
+                        const tbody = document.createElement('tbody');
+                        cleanTable.appendChild(tbody);
+
+                        // Clean up the table
+                        const rows = table.getElementsByTagName('tr');
+                        let skipNextRow = false;
+                        let criterionNumber = 1; // Initialize criterion counter for this table
+                        
+                        // Start from index 1 to skip the title row
+                        for (let i = 1; i < rows.length; i++) {
+                            const row = rows[i];
+                            
+                            // Skip the Course Learning Outcomes row and the row after it
+                            const rowText = row.textContent.trim().toLowerCase();
+                            if (rowText.includes('course learning outcomes')) {
+                                skipNextRow = true;
+                                continue;
+                            }
+                            if (skipNextRow) {
+                                skipNextRow = false;
+                                continue;
+                            }
+
+                            // Clean up paragraphs in the row
+                            const cells = row.getElementsByTagName('td');
+                            let hasContent = false;
+
+                            const newRow = document.createElement('tr');
+                            for (let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
+                                const cell = cells[cellIndex];
+                                const newCell = document.createElement('td');
+
+                                // Only process the first cell (criteria cell) specially
+                                if (cellIndex === 0) {
+                                    // Check if the cell has any non-whitespace content
+                                    const cellContent = getAllTextContent(cell).trim();
+                                    if (cellContent) {
+                                        newCell.appendChild(processCriterionCell(cell, criterionNumber));
+                                        criterionNumber++; // Increment counter after processing each criterion cell
+                                        hasContent = true;
+                                    }
+                                } else {
+                                    // For other cells, join all text content into a single paragraph
+                                    const elements = cell.querySelectorAll('p, ul, ol');
+                                    const combinedText = Array.from(elements)
+                                        .map(el => el.textContent.trim() + ' ') // Trim and add space
+                                        .join('')
+                                        .trim() // Final trim to remove trailing space
+                                        .replace(/\s{2,}/g, ' '); // Replace multiple spaces with single space
+                                    
+                                    if (combinedText) {
+                                        const p = document.createElement('p');
+                                        p.textContent = combinedText;
+                                        p.contentEditable = 'true';
+                                        newCell.appendChild(p);
+                                        hasContent = true;
+                                    }
+                                }
+                                
+                                newRow.appendChild(newCell);
+                            }
+
+                            // Only add rows that have actual content
+                            if (hasContent) {
+                                tbody.appendChild(newRow);
+                            }
+                        }
+
+                        // Add the clean table to the rubric div
+                        rubricDiv.appendChild(cleanTable);
+                        
+                        // After processing, check if the table is blank
+                        const isBlankTable = Array.from(cleanTable.rows).every(row => {
+                            // Check all cells except the first one
+                            return Array.from(row.cells).slice(1).every(cell => !getAllTextContent(cell).trim());
+                        });
+
+                        if (isBlankTable) {
+                            // Remove the table and its preceding heading
+                            rubricDiv.removeChild(heading);
+                            rubricDiv.removeChild(cleanTable);
+                        } else {
+                            // Add a download button for CSV export
+                            const downloadButton = document.createElement('button');
+                            downloadButton.textContent = 'Download CSV';
+                            downloadButton.onclick = function() {
+                                const csvContent = generateCSVContent(cleanTable, heading.textContent.trim());
+                                downloadCSV(csvContent, `${heading.textContent.trim().replace(/\s+/g, '_')}_rubric.csv`);
+                            };
+                            rubricDiv.appendChild(downloadButton);
+                        }
+
+                        // Add the complete rubric div to the output
+                        output.appendChild(rubricDiv);
+                    });
+
+                    // Function to generate CSV content
+                    function generateCSVContent(table, rubricName) {
+                        const rows = Array.from(table.rows);
+                        const headerRow = rows[0];
+                        const headers = Array.from(headerRow.cells).slice(1).map(cell => cell.textContent.trim());
+
+                        const csvRows = [];
+
+                        // Add header row
+                        csvRows.push('"Rubric Name","Criteria Name","Criteria Description","Criteria Enable Range","Rating Name","Rating Description","Rating Points","Rating Name","Rating Description","Rating Points","Rating Name","Rating Description","Rating Points","Rating Name","Rating Description","Rating Points","Rating Name","Rating Description","Rating Points"');
+
+                        // Process each criterion row
+                        for (let i = 1; i < rows.length; i++) {
+                            const row = rows[i];
+                            const criterionCell = row.cells[0];
+                            const criterionName = criterionCell.querySelector('.criterion-name').textContent;
+                            const criterionDescription = criterionCell.querySelector('.criterion-description p').textContent;
+                            let maxPointsText = 0;
+                            if (criterionCell.querySelector('.criterion-score')) {
+                                let maxPointsText = criterionCell.querySelector('.criterion-score').textContent.match(/\d+/);
+                            }
+                            // const maxPointsText = criterionCell.querySelector('.criterion-score').textContent.match(/\d+/);
+                            const maxPoints = maxPointsText ? parseInt(maxPointsText[0]) : 0;
+
+                            const rowValues = [
+                                rubricName,
+                                criterionName,
+                                criterionDescription,
+                                'true' // Criteria Enable Range
+                            ];
+
+                            headers.forEach((ratingName, index) => {
+                                const ratingDescription = row.cells[index + 1].textContent.trim();
+                                let ratingPoints = 0;
+                                switch (ratingName) {
+                                    case 'High Distinction':
+                                        ratingPoints = maxPoints;
+                                        break;
+                                    case 'Distinction':
+                                        ratingPoints = (maxPoints * 0.85 - 0.1).toFixed(1);
+                                        break;
+                                    case 'Credit':
+                                        ratingPoints = (maxPoints * 0.75 - 0.1).toFixed(1);
+                                        break;
+                                    case 'Pass':
+                                        ratingPoints = (maxPoints * 0.65 - 0.1).toFixed(1);
+                                        break;
+                                    case 'Fail':
+                                        ratingPoints = (maxPoints * 0.5 - 0.1).toFixed(1);
+                                        break;
+                                }
+
+                                rowValues.push(ratingName, ratingDescription, ratingPoints);
+                            });
+
+                            // Wrap all text values in quotes
+                            csvRows.push(rowValues.map(value => `"${value}"`).join(','));
+                        }
+
+                        return csvRows.join('\n');
+                    }
+
+                    // Function to trigger CSV download
+                    function downloadCSV(csvContent, filename) {
+                        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                        const link = document.createElement('a');
+                        const url = URL.createObjectURL(blob);
+                        link.setAttribute('href', url);
+                        link.setAttribute('download', filename);
+                        link.style.visibility = 'hidden';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                }
+            } catch (error) {
+                log(`Error processing file: ${error.message}`);
+                alert('Error processing file. Check the debug log for details.');
+            } finally {
+                processButton.disabled = false;
+            }
+        });
+
+        log('Application initialized');
+    </script>
+</body>
+</html>
