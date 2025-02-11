@@ -59,18 +59,6 @@
             border-color: var(--secondary-color);
         }
 
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            color: #666;
-        }
-
-        /* .footer .heart {
-            color: var(--primary-color);
-            font-style: normal;
-        } */
-
         .drop-zone p {
             margin: 0;
             font-size: 1.2em;
@@ -98,6 +86,31 @@
 
         #output {
             margin-top: 30px;
+            margin-bottom: 60px; /* Make room for footer */
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--background-color);
+            padding: 10px 20px;
+            border-top: 1px solid var(--tertiary-color);
+            font-size: 0.8em;
+            color: var(--text-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        footer label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            user-select: none;
         }
 
         .rubric-table {
@@ -142,17 +155,7 @@
             background-color: #f8f9fa;
         }
 
-        #debugLog {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #1C1C1E;
-            color: #00FF00;
-            font-family: monospace;
-            border-radius: 6px;
-            max-height: 300px;
-            overflow-y: auto;
-            display: none;
-        }
+
 
         .debug-entry {
             margin: 5px 0;
@@ -245,7 +248,7 @@
             <p>Upload a course details Word document to generate Canvas rubric CSV files for each assessment rubric.</p>
             <p>If you encounter any errors, check that your Word document includes max point percentages and CLOs for all criteria. Save, re-upload and re-run the tool.</p>
             <p>To upload your CSV file to Canvas, simply navigate to 'Rubrics' in the course navigation menu. <br>Click 'Import Rubric', then upload the file you created with Kangarubric.</p>
-            <p class="note"><strong>Note: </strong>Unfortunately, Canvas <a href="https://community.canvaslms.com/t5/Known-Issues/OPEN-Rubric-imports-cannot-process-decimal-values-for-rating/ta-p/631147" target="_blank">doesn't know how to handle decimal points in rubric CSV files</a>. <br>You'll need to manually change them after your import your rubric.</p>
+            <p class="note"><strong>Note: </strong>Unfortunately, Canvas <a href="https://community.canvaslms.com/t5/Known-Issues/OPEN-Rubric-imports-cannot-process-decimal-values-for-rating/ta-p/631147" target="_blank">doesn't know how to handle decimal points in rubric CSV files</a>. <br>You'll need to manually change them after your import your rubric.<br>A fix is coming in a future Canvas update.</p>
             <p>If you're still running into trouble, please contact <a href="mailto:tim.churchward@adelaide.edu.au">Tim Churchward</a>.</p>
         </div>
         
@@ -260,27 +263,17 @@
 
         <div id="output"></div>
 
-        <div class="footer">
-            Made with <span class="heart">♥</span> for wonderful people like you. Because manually creating Canvas rubrics sucks.
-        </div>
-        <div id="debugLog"></div>
+        <footer>
+            <div></div>
+            <p>Made with <span class="heart">♥</span> for wonderful people like you.</p>
+            <span>v0.2</span>
+        </footer>
     </div>
 
     <script>
         // Debug mode
-        let DEBUG = false;
-
         function log(message) {
-            if (DEBUG) {
-                const debugLog = document.getElementById('debugLog');
-                debugLog.style.display = 'block';
-                const entry = document.createElement('div');
-                entry.className = 'debug-entry';
-                entry.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
-                debugLog.appendChild(entry);
-                debugLog.scrollTop = debugLog.scrollHeight;
-                console.log(message);
-            }
+            console.log(`${new Date().toLocaleTimeString()} - ${message}`);
         }
 
         // Helper function to get all text content from a cell
@@ -332,10 +325,29 @@
             const paragraphs = Array.from(cell.getElementsByTagName('p'));
             let textContent = '';
 
-            // 3. Find CLOs
+            // 3. First check for potentially ambiguous CO references
+            const coRegex = /(?:\((?:COs?\W*\s*\d+(?:\s*[,;&]\s*(?:COs?\W*\s*)?\d+)*)\))|(?:COs?\W*\s*\d+(?:\s*[,;&]\s*(?:COs?\W*\s*)?\d+)*)/i;
+            const coMatch = getAllTextContent(cell).match(coRegex);
+            if (coMatch && !hasShownCOWarning) {
+                const confirmed = confirm('Warning: Found "CO" references in your rubric (e.g. "' + coMatch[0] + '"). ' +
+                    'These could be Course Outcomes or chemical compounds (like CO2). ' +
+                    'To avoid ambiguity, these will not be processed. ' +
+                    'Please use "CLO" instead of "CO" if you meant Course Learning Outcomes.\n\n' +
+                    'Click OK to continue processing the rest of the rubric.');
+                if (!confirmed) {
+                    return;
+                }
+                hasShownCOWarning = true; // Mark that we've shown the warning
+            }
+
+            // 4. Find CLOs
             let cloText = '';
             // Match either a full group of CLOs in brackets, or individual CLO references
-            const cloRegex = /(?:\((?:(?:CLO|CO)\s*\d+(?:\s*[,;&]\s*(?:CLO|CO)?\s*\d+)*)\))|(?:(?:CLO|CO)\s*\d+(?:\s*[,;&]\s*(?:CLO|CO)?\s*\d+)*)/i;
+            // Version that matches both CLO/CO (commented out to avoid accidental matches with CO2 etc)
+            // const cloRegex = /(?:\((?:(?:CLOs?|COs?)\W*\s*\d+(?:\s*[,;&]\s*(?:(?:CLOs?|COs?)\W*\s*)?\d+)*)\))|(?:(?:CLOs?|COs?)\W*\s*\d+(?:\s*[,;&]\s*(?:(?:CLOs?|COs?)\W*\s*)?\d+)*)/i;
+
+        // Version that only matches CLO variants (safer as it won't match CO2 etc)
+        const cloRegex = /(?:\((?:CLOs?\W*\s*\d+(?:\s*[,;&]\s*(?:CLOs?\W*\s*)?\d+)*)\))|(?:CLOs?\W*\s*\d+(?:\s*[,;&]\s*(?:CLOs?\W*\s*)?\d+)*)/i;
             const cloMatch = getAllTextContent(cell).match(cloRegex);
 
             if (cloMatch) {
@@ -366,23 +378,29 @@
                 const clone = p.cloneNode(true);
                 let text = clone.textContent.trim();
 
+                // Helper function to clean text after each step
+                const cleanText = (str) => {
+                    return str.replace(/^[^a-zA-Z0-9]+/, '').trim(); // Remove any leading non-alphanumeric chars
+                };
+
                 // 4.1 Remove criterion names
                 text = text.replace(/(?:Criterion|Criteria)\s+\d+/gi, '');
+                text = cleanText(text);
                 
                 // Remove score if found
                 if (maxScore) {
                     text = text.replace(/\(?\d+%\)?/, '');
+                    text = cleanText(text);
                 }
                 
                 // Remove CLOs if found
                 if (cloMatch) {
                     text = text.replace(cloRegex, '');
+                    text = cleanText(text);
                 }
 
                 // 4.2 & 4.3 Skip empty or non-alphanumeric paragraphs
                 if (text && /[a-zA-Z0-9]/.test(text)) {
-                    // Clean up any leftover dashes or whitespace
-                    text = text.replace(/^[-–\s]+/, '').trim();
                     if (text) {
                         const p = document.createElement('p');
                         p.contentEditable = 'true';
@@ -437,6 +455,10 @@
         });
 
         function handleFileSelection(file) {
+            // Clear any existing output
+            const output = document.getElementById('output');
+            output.innerHTML = '';
+            
             if (file && file.name.endsWith('.docx')) {
                 currentFile = file;
                 dropZone.querySelector('p').textContent = `Selected: ${file.name}`;
@@ -448,11 +470,15 @@
             }
         }
 
+        let hasShownCOWarning = false; // Track if we've shown the CO warning for current document
+
         processButton.addEventListener('click', async () => {
             if (!currentFile) {
                 log('No file selected');
                 return;
             }
+            
+            hasShownCOWarning = false; // Reset the warning flag for each new document
 
             log('Starting file processing');
             processButton.disabled = true;
@@ -467,8 +493,78 @@
                 const html = result.value;
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = html;
+
+                // Helper function to extract content from a table
+                const extractTableContent = (table) => {
+                    log('Extracting content from nested table with dimensions: ' + 
+                        table.getElementsByTagName('tr').length + ' rows x ' + 
+                        (table.getElementsByTagName('tr')[0]?.getElementsByTagName('td').length || 0) + ' columns');
+                    
+                    // Create a single paragraph to hold all content
+                    const paragraph = document.createElement('p');
+                    paragraph.contentEditable = 'true';
+                    
+                    // Process each row
+                    const rows = table.getElementsByTagName('tr');
+                    Array.from(rows).forEach((row, rowIndex) => {
+                        const cells = row.getElementsByTagName('td');
+                        if (cells.length === 0) return; // Skip header rows
+                        
+                        Array.from(cells).forEach((cell, i) => {
+                            // Get the text content, handling any nested tables recursively
+                            const nestedTables = cell.getElementsByTagName('table');
+                            if (nestedTables.length > 0) {
+                                Array.from(nestedTables).forEach(nestedTable => {
+                                    const nestedContent = extractTableContent(nestedTable);
+                                    nestedTable.parentNode.replaceChild(nestedContent, nestedTable);
+                                });
+                            }
+                            
+                            const cellText = cell.textContent.trim();
+                            if (cellText) {
+                                if (paragraph.textContent) {
+                                    paragraph.textContent += '\n' + cellText;
+                                } else {
+                                    paragraph.textContent = cellText;
+                                }
+                            }
+                        });
+                    });
+                    
+                    return paragraph;
+                };
+
+                // Helper function to flatten nested tables in a cell
+                const flattenNestedTables = (element) => {
+                    const tables = element.getElementsByTagName('table');
+                    // Convert to array since we'll be modifying the DOM
+                    Array.from(tables).forEach(table => {
+                        const container = extractTableContent(table);
+                        table.parentNode.replaceChild(container, table);
+                    });
+                };
+
+                // Flatten all nested tables in all cells of all tables
+                const allTables = tempDiv.getElementsByTagName('table');
+                log('Processing ' + allTables.length + ' top-level tables');
+                Array.from(allTables).forEach((table, index) => {
+                    const cells = table.getElementsByTagName('td');
+                    log('Table ' + (index + 1) + ' has ' + cells.length + ' cells');
+                    let nestedTableCount = 0;
+                    Array.from(cells).forEach((cell, cellIndex) => {
+                        const nestedTables = cell.getElementsByTagName('table');
+                        if (nestedTables.length > 0) {
+                            log('Found ' + nestedTables.length + ' nested table(s) in cell ' + (cellIndex + 1));
+                            nestedTableCount += nestedTables.length;
+                        }
+                        flattenNestedTables(cell);
+                    });
+                    if (nestedTableCount > 0) {
+                        log('Flattened ' + nestedTableCount + ' nested tables in table ' + (index + 1));
+                    }
+                });
                 
-                // Find all tables
+                // Find all tables (now without any nested ones)
                 const tables = tempDiv.getElementsByTagName('table');
                 log(`Found ${tables.length} tables in document`);
 
@@ -546,7 +642,7 @@
                         // Create header
                         const thead = document.createElement('thead');
                         const headerRow = document.createElement('tr');
-                        const headers = ['Criterion', 'High Distinction', 'Distinction', 'Credit', 'Pass', 'Fail'];
+                        const headers = ['Criteria', 'High Distinction', 'Distinction', 'Credit', 'Pass', 'Fail'];
                         
                         headers.forEach(text => {
                             const th = document.createElement('th');
@@ -738,5 +834,6 @@
 
         log('Application initialized');
     </script>
+   
 </body>
 </html>
