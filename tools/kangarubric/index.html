@@ -503,7 +503,7 @@
         <footer>
             <div></div>
             <p>Made with <span class="heart">♥</span> for wonderful people like you.</p>
-            <span>v0.3</span>
+            <span>v0.4</span>
         </footer>
     </div>
 
@@ -1173,6 +1173,8 @@
                             const row = rows[i];
                             const criterionCell = row.cells[0];
                             const criterionName = criterionCell.querySelector('.criterion-name').textContent;
+                            const criterionScore = criterionCell.querySelector('.criterion-score')?.textContent || '';
+                            const fullCriterionName = `${criterionName} ${criterionScore}`;
                             // Get description content and handle line breaks based on avoidCanvasBugs setting
                             const descriptionP = criterionCell.querySelector('.criterion-description p');
                             let criterionDescription = '';
@@ -1200,10 +1202,14 @@
                             // Helper function to escape CSV field and handle special characters
                             // No need for escapeCSV anymore - Papa Parse handles this
 
+                            // Get CLOs
+                            const clos = criterionCell.querySelector('.criterion-clos')?.textContent || '';
+                            const fullDescription = criterionDescription + (clos ? ` ${clos}` : '');
+
                             const rowData = [
                                 rubricName,
-                                criterionName,
-                                criterionDescription,
+                                fullCriterionName,
+                                fullDescription,
                                 'true' // Criteria Enable Range
                             ];
 
