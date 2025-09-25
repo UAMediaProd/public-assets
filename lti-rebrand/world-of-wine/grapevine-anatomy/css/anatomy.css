@@ -1,0 +1,142 @@
+/* Content wrapper */
+#content {
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+h4 {
+    color: #1aa1e0; /* edx dodgerblue */
+}
+
+/* index - hidden unless error loading page */
+#index {
+    display: none;
+}
+
+/* footer */
+#footer {
+    border-top: thin solid #999;
+    font-size: 80%;
+    margin-top: 8ex;
+    padding-top: 0.5ex;
+    width: 100%;
+}
+#footer .copyright-link {
+    padding: 0;
+    text-align: left;
+}
+#footer .usage {
+    white-space: nowrap;
+    display: inline-block;
+}
+#footer .references-link {
+    padding: 0;
+    text-align: right;
+}
+
+/* Main large image */
+.main-image-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+.main-image-wrapper .img {
+    display: none;
+}
+/* Show the default main image */
+.main-image-wrapper .img.default {
+    display: block;
+}
+
+/* subtitle and more info button */
+#subtitle {
+    display: inline-block;
+}
+#subtitle:hover,
+#subtitle:active,
+#subtitle:focus {
+    cursor: pointer;
+}
+#buttonLink {
+    display: inline-block;
+    position: relative;
+    left: 10px;
+    top: -2px;
+    background-color: #009edc;
+    border-color: #009edc;
+    border-radius: 5px;
+}
+.hidden {
+    visibility: hidden;
+}
+#buttonLink:active {
+    left: 11px;
+    top: -1px;
+}
+#buttonLink:hover,
+#buttonLink:active {
+    box-shadow: 0 2px 1px rgba(0,0,0,0.2);
+    background-color: #33b2eb;
+    border-color: #33b2eb;
+}
+
+/* Image list */
+#image-list {
+    margin: 20px auto 20px;
+    display: block;
+    box-sizing: border-box;
+    text-align: center;
+}
+#image-list div {
+    display: inline;
+}
+#image-list img {
+    width: 140px;
+    height: 90px;
+    border: thin solid #D8F6CE;
+}
+#image-list img.active {
+    border: thin solid #688A08;
+}
+.slick-prev:before,
+.slick-next:before {
+    color: black;
+}
+
+/* Info dialogs */
+.reveal-modal h4 {
+    line-height: 1.0;
+}
+.reveal-modal p {
+    line-height: 1.0;
+}
+.reveal-modal .close-reveal-modal {
+    line-height: 0.5;
+}
+.image-reveal {
+    border: thin solid #CED8F6;
+    margin-left: auto;
+    margin-right:auto;
+}
+.slidereveal-gui {
+    border-color: black;
+    color: black;
+}
+.image-reveal {
+    display: inline-block;
+}
+#main-grapes img {
+    height: 491px;
+    width: 326px;
+}
+#main-leaf img {
+    height: 491px;
+    width: 585px;
+}
+#main-trunk img {
+    height: 491px;
+    width: 655px;
+}
+#main-vine img {
+    height: 491px;
+    width: 354px;
+}

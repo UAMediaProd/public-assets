@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+    <head>
+        <title>World of Wine :: Wine Tasting</title>
+        <link rel="stylesheet" type="text/css" href="css/foundation.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/tasting.css" />
+        <script lang="text/javascript" src="js/vendor/modernizr.js"></script>
+        <script lang="text/javascript" src="js/vendor/jquery.js"></script>
+        <script lang="text/javascript" src="js/foundation.min.js"></script>
+        <script lang="text/javascript" src="js/cookies.min.js"></script>
+        <script lang="text/javascript" src="js/jquery.selecttext.js"></script>
+        <script lang="text/javascript" src="js/tasting.js"></script>
+        <script>
+            $(document).ready(function () {
+                showPage(window.location.href, {
+                    prefix: "inc/",
+                    links: "#index",
+                    target: "#page",
+                }).then(function () {
+                    getChoices("#index li", true);
+
+                    $("#reset-cookies").on("click", function () {
+                        $("#index li").each(function (idx, choice) {
+                            var $choice = $(choice);
+                            var id = $choice.attr("id");
+                            Cookies.expire("wine-" + id);
+                        });
+                        window.location.reload(false);
+                    });
+
+                    // Have to run this after the page is loaded
+                    $(document).foundation({
+                        accordion: {
+                            multi_expand: true,
+                        },
+                        reveal: {
+                            animation: "fade",
+                        },
+                    });
+                });
+            });
+        </script>
+        <script src="/course.units/edx/js/ga.js"></script>
+    </head>
+    <body>
+        <div id="content" class="small-centered columns">
+            <div id="index">
+                <h1>Wine Tasting Guide</h1>
+                <ol>
+                    <li id="colour-choice">
+                        <a href="colour.html">Colour</a>
+                        <div class="show-choices"></div>
+                    </li>
+                    <li id="clarity-choice">
+                        <a href="clarity.html">Clarity</a>
+                        <div class="show-choices"></div>
+                    </li>
+                    <li id="aroma-choice">
+                        <a href="aroma.html">Aroma</a>
+                        <div class="show-choices"></div>
+                    </li>
+                    <li id="flavour-choice">
+                        <a href="flavour.html">Flavour</a>
+                        <div class="show-choices"></div>
+                    </li>
+                    <li id="sweet-choice">
+                        <a href="texture.html">Acidity &amp; Sweetness</a>
+                        <div class="show-choices"></div>
+                    </li>
+                    <li id="feel-choice">
+                        <a href="texture.html">Astringency &amp; Mouthfeel</a>
+                        <div class="show-choices"></div>
+                    </li>
+                    <li id="body-choice">
+                        <a href="texture.html">Body &amp; Finish</a>
+                        <div class="show-choices"></div>
+                    </li>
+                    <li id="summary-choice">
+                        <a href="summary.html">Summary</a>
+                    </li>
+                </ol>
+
+                <button id="reset-cookies">Start Again</button>
+            </div>
+            <div id="page"></div>
+        </div>
+    </body>
+</html>

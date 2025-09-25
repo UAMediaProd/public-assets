@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<title>World of Wine :: Make Your Own Wine</title>
+<link href="css/styles.css" rel="stylesheet" type="text/css" />
+<link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/jquery-ui-1.8.1.custom.min.js"></script>
+<script src="js/app.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/modernizr-1.7.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    start();
+});
+</script>
+<script src="/course.units/edx/js/ga.js"></script>
+</head>
+<body>
+<div id="screen" class="fullheight fullwidth" >
+<div id="menu" class="fullheight">
+<div id="question" class="blackText"></div>
+<div class="cultivars">
+<div class="selectcultivar" onClick="startgame(0)"></div>
+<div class="selectcultivar" onClick="startgame(1)"></div>
+<div class="selectcultivar" onClick="startgame(2)"></div>
+<div class="selectcultivar" onClick="startgame(3)"></div>
+</div>
+<div id="credits" class="whiteText" onClick="showCredits()"><span>Credits</span></div>
+</div>
+<div id="game" class="fullheight">
+<div id="hint"></div>
+<div id="map"></div>
+<div id="gameback" class="fullheight"></div>
+<div id="hintbutton" onClick="showhint()"></div>
+<div id="nexthint" onClick="nexthint()"></div>
+</div>
+
+<div id="credit-links" style="display: none;">
+    <ul>
+    <li><a href="http://www.awri.com.au" target="_new">Australian Wine Research Institute</a></li>
+    <li><a href="http://www.agwa.net.au" target="_new">Australian Grape and Wine Authority</a></li>
+    <li><a href="http://www.accolade-wines.com" target="_new">Hardy Wines</a></li>
+    <li><a href="http://www.southaustralia.com" target="_new">South Australian Tourism Commission</a></li>
+    </ul>
+</div>
+
+<div id="share-wrapper" style="display:none;">
+<div class="modal-mask"></div>
+<div id="share-modal">
+    <div class="modal-close"><a href="#" title="close">&#x2715;</a></div>
+    <div class="share-row">
+        <div class="share-icon"><i class="circled fa fa-share-alt"></i></div>
+        <div class="share-heading">Share this link</div>
+    </div>
+    <div class="share-row">
+        <input type="text" class="share-link" />
+    </div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

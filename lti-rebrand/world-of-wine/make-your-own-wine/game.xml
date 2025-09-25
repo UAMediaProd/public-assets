@@ -1,0 +1,444 @@
+<wines>
+
+<cultivars>
+<cultivar id="1" name="riesling" title="Classic Light Riesling">
+<screen no="1" title="Region" text="Where will you pick the grapes for your Riesling?"><![CDATA[To produce the fresh, crisp flavours of a light Riesling wine the grapes should be grown in a cool climate and picked
+at early to moderate ripeness.]]>
+<answer no="1" text="Eden Valley, South Australia" score="9"/>
+<answer no="2" text="Hunter Valley, New South Wales" score="5"/>
+<answer no="3" text="Riverina, New South Wales" score="5"/>
+</screen>
+
+<screen no="2" title="Ripeness" text="At what stage of ripening will you pick your Riesling grapes?"><![CDATA[Baum&eacute; is a measure of the sugar content of a grape and indicates how ripe it is. Grapes generally range from less
+than 10 Baum&eacute; for a fairly acidic, unripe grape to 13 - 16 Baum&eacute; for a very ripe grape.]]>
+<answer no="1" text="at a sugar level of 11.5 - 13 Baumé" score="9"/>
+<answer no="2" text="at a sugar level of 13 - 14 Baumé" score="5"/>
+<answer no="3" text="at a sugar level of 14 - 16 Baumé" score="3"/>
+</screen>
+
+<screen no="3" title="Picking" text="Bearing in mind production costs as well as quality, will you pick your grapes:"><![CDATA[Hand picking is best for all wine grapes as the grape is less likely to get broken. Once a grape breaks, air gets to the
+juice and the oxidation process begins. Oxidation speeds up as temperatures rise. However, handpicking is very
+expensive, so it is only worth doing for the highest quality wines. For other white wines mechanical harvesters are
+used, but usually at night when the temperature is cooler and the juice less likely to oxidize.]]>
+<answer no="1" text="by hand during the day?" score="3"/>
+<answer no="2" text="mechanically during the day?" score="0"/>
+<answer no="3" text="mechanically at night?" score="9"/>
+</screen>
+
+<screen no="4" title="Temperature" text="When the grapes have reached the winery and been crushed, will you"><![CDATA[It is important to keep white wines cool at every stage of production in order to maintain the delicate flavours and
+purity of colour and slow the rate of oxidation.]]>
+<answer no="1" text="chill them to protect the flavour?" score="9"/>
+<answer no="2" text="keep them at about room temperature?" score="3"/>
+<answer no="3" text="heat them to destroy bacteria?" score="-32"/>
+</screen>
+
+<screen no="5" title="Press or crush" text="After crushing will you:"><![CDATA[An aromatic light-bodied wine like a Riesling requires only the pure, delicately flavoured grape juice to be fermented.
+The juice is separated from the skins in a press immediately after crushing. When making a fuller, richer white wine,
+like a Semillon or a Chardonnay, the juice can be left with the skins for a few hours, to allow it to pick up extra
+flavouring compounds. The mixture is then pressed, and the juice is sent off to fermentation.]]>
+<answer no="1" text="send the juice and skins straight off to fermentation?" score="-32"/>
+<answer no="2" text="leave the juice on the skins for a few hours before pressing?" score="-15"/>
+<answer no="3" text="press the mixture immediately to release the juice?" score="9"/>
+</screen>
+
+<screen no="6" title="Yeast" text="Next you add yeast in order to:"><![CDATA[Once the white grape juice has been pressed and has settled out, it is ready for the fermentation process. Yeast is
+added to the juice, and in a complex biological reaction, the yeast transforms the grape sugar into alcohol, while carbon
+dioxide gas is given off. If all the sugar is allowed to ferment, the alcohol content of the wine will be roughly equal to
+the degrees Baum&eacute; of the original juice i.e. 10 Baum&eacute; is approximately equal to 10% alcohol.]]>
+<answer no="1" text="aid fermentation by creating bubbles?" score="0"/>
+<answer no="2" text="aid fermentation by making the contents 'rise'?" score="0"/>
+<answer no="3" text="aid fermentation by turning the grape sugar into alcohol?" score="9"/>
+</screen>
+
+<screen no="7" title="Ferment temperature" text="What temperature will you ferment the juice at?"><![CDATA[It is important to keep white wine cool at every stage of the production process in order to maintain the fresh fruit
+flavour and colour.]]>
+<answer no="1" text="warm 22 - 30 ºC" score="3"/>
+<answer no="2" text="cool 15 - 18 ºC" score="9"/>
+</screen>
+
+<screen no="8" title="Ferment duration" text="How long will you ferment your Riesling for?"><![CDATA[White wine ferments at a cool temperature, so the fermentation process takes longer.]]>
+<answer no="1" text="7 - 10 days" score="3"/>
+<answer no="2" text="10 - 30 days" score="9"/>
+</screen>
+
+<screen no="9" title="Malo-lactic fermentation" text="After fermentation, do you:"><![CDATA[Wines with a fuller body are put through malo-lactic fermentation. This process involves the addition of bacteria that
+transforms the sharp-tasting malic acid, which occurs naturally in the wine, to lactic acid, which is much softer. A
+buttery taste can also be produced from this process. Wines not undergoing malo-lactic fermentation are usually
+treated with sulfur dioxide at this stage to prevent oxidation and any further microbial activity.]]>
+<answer no="1" text="add bacteria to create a malo-lactic fermentation to give a smooth flavour?" score="-15"/>
+<answer no="2" text="add sulphur dioxide to prevent oxidation and to protect colour and flavour?" score="9"/>
+<answer no="3" text="do neither of the above?" score="0"/>
+</screen>
+
+<screen no="10" title="Maturation" text="Will you mature your Riesling in:"><![CDATA[Full-bodied white wines are matured in temperature-controlled tanks for part of the time and also spend part of the
+time in barrels in order to pick up oaky scents and flavours. Fresh, elegant wines do not spend any time in oak barrels
+at all. The heavy influence of the wood would not suit the lightness of the wine.]]>
+<answer no="1" text="temperature-controlled stainless steel tanks?" score="9"/>
+<answer no="2" text="oak barrels?" score="-15"/>
+<answer no="3" text="some time in oak barrels and some time in tanks?" score="0"/>
+</screen>
+
+<screen no="11" title="Stabilising" text="Before bottling, you must decide whether or not to cold stabilise your wine."><![CDATA[When white wines cool to a certain temperature, tartrate crystals can often form in the wine. Although these are
+quite natural and do not affect the taste or quality of the wine, they do take away from the clarity of the wine in the
+glass and therefore its general acceptance. So white wines usually go through a period of cold stabilisation before
+bottling. The temperature is brought down and any crystals that form are filtered out, so when the wine is bottled and
+sold it will be free of crystals.]]>
+<answer no="1" text="will you do it in order to give the wine a richer colour?" score="3"/>
+<answer no="2" text="will you do it to help remove unwanted crystals?" score="9"/>
+<answer no="3" text="or will you leave your wine to stabilise naturally?" score="3"/>
+</screen>
+
+<screen no="12" title="Tasting Notes" text="Your wine has been assessed according to Wine Show standards. Here is your result."><![CDATA[]]>
+</screen>
+
+</cultivar>
+
+<cultivar id="2" name="cabernet" title="Cabernet Sauvignon">
+<screen no="1" title="Region" text="Where will you pick the grapes for your medium to full-bodied Cabernet Sauvignon?"><![CDATA[To produce the complex flavours of a medium-to-full-bodied Cabernet Sauvignon the grapes should be grown in a
+warm climate and picked when ripe.]]>
+<answer no="1" text="Coonawarra, South Australia" score="9"/>
+<answer no="2" text="Central Victorian Mountain Country" score="5"/>
+<answer no="3" text="Piccadilly Valley, Adelaide Hills" score="0"/>
+</screen>
+
+<screen no="2" title="Ripeness" text="At what stage of ripening will you pick your Cabernet Sauvignon grapes?"><![CDATA[Baum&eacute; is a measure of the sugar content of a grape and indicates how ripe it is. Grapes generally range from less
+than 10 Baum&eacute; for a fairly acidic, unripe grape to 13 - 16 Baum&eacute; for a very ripe grape.]]>
+<answer no="1" text="at a sugar level of 11.5 - 12.5 Baumé" score="2"/>
+<answer no="2" text="at a sugar level of 12.5 - 13 Baumé" score="5"/>
+<answer no="3" text="at a sugar level of 13 - 15 Baumé" score="9"/>
+</screen>
+
+<screen no="3" title="Picking" text="Bearing in mind production costs as well as quality, will you pick your grapes:"><![CDATA[Hand picking is best for all wine grapes as the grape is less likely to get broken. Once a grape breaks, air gets to the
+juice and the oxidation process begins. Oxidation speeds up in hot weather. This is most dangerous for white wine
+grapes - it means they may lose some of their delicate flavours and the juice may become discoloured. Red grapes are
+not so susceptible to the faults caused by oxidation and so can be harvested mechanically during the day - which is
+both quicker and cheaper.]]>
+<answer no="1" text="by hand during the day?" score="5"/>
+<answer no="2" text="mechanically during the day?" score="9"/>
+<answer no="3" text="mechanically at night?" score="5"/>
+</screen>
+
+<screen no="4" title="Temperature" text="When the grapes have reached the winery and been crushed, will you"><![CDATA[Red grapes usually arrive at the correct temperature and, unlike white grapes, do not need to be chilled during
+production, although temperatures do need to be controlled during hot weather.]]>
+<answer no="1" text="chill them to protect the flavour?" score="0"/>
+<answer no="2" text="keep them at about room temperature?" score="9"/>
+<answer no="3" text="heat them to destroy bacteria?" score="-32"/>
+</screen>
+
+<screen no="5" title="Press or crush" text="After crushing will you:"><![CDATA[Red wines are not generally pressed at all before fermentation. The juice is fermented together with the skins, which
+is where red wine gains its colour. Otherwise the juice would be quite pale, similar to that of white wine. Prolonged
+contact with the skins also allows it to pick up tannins and other important flavours throughout the fermentation period.]]>
+<answer no="1" text="send the juice and skins straight off to fermentation?" score="9"/>
+<answer no="2" text="leave the juice on the skins for a few hours before pressing?" score="-15"/>
+<answer no="3" text="press the mixture immediately to release the juice?" score="-32"/>
+</screen>
+
+<screen no="6" title="Yeast" text="Next you add yeast in order to:"><![CDATA[Once the white grape juice has been pressed and has settled out, it is ready for the fermentation process. Yeast is
+added to the juice, and in a complex biological reaction, the yeast transforms the grape sugar into alcohol, while carbon
+dioxide gas is given off. If all the sugar is allowed to ferment, the alcohol content of the wine will be roughly equal to
+the degrees Baum&eacute; of the original juice i.e. 10 Baum&eacute; is approximately equal to 10% alcohol.]]>
+<answer no="1" text="aid fermentation by creating bubbles?" score="0"/>
+<answer no="2" text="aid fermentation by making the contents 'rise'?" score="0"/>
+<answer no="3" text="aid fermentation by turning the grape sugar into alcohol?" score="9"/>
+</screen>
+
+<screen no="7" title="Ferment temperature" text="What temperature will you ferment the juice at?"><![CDATA[Red wine needs a warm temperature during fermentation to enable it to extract colour, flavours and body from the
+skins.]]>
+<answer no="1" text="warm 22 - 30 ºC" score="9"/>
+<answer no="2" text="cool 15 - 18 ºC" score="3"/>
+</screen>
+
+<screen no="8" title="Ferment duration" text="How long will you ferment your Cabernet Sauvignon for?"><![CDATA[Red wine, fermenting at a higher temperature, completes the fermentation process in less time.]]>
+<answer no="1" text="7 - 10 days" score="9"/>
+<answer no="2" text="10 - 30 days" score="3"/>
+</screen>
+
+<screen no="9" title="Malo-lactic fermentation" text="After fermentation, do you:"><![CDATA[Generally red wines are put through malo-lactic fermentation. This process involves the addition of bacteria that
+transforms the sharp-tasting malic acid, which occurs naturally in the wine, to lactic acid, which is much softer. A
+buttery taste can also be produced from this process. Wines not undergoing malo-lactic fermentation are usually
+treated with sulfur dioxide at this stage to prevent oxidation and any further microbial activity.]]>
+<answer no="1" text="add bacteria to create a malo-lactic fermentation?" score="9"/>
+<answer no="2" text="add sulphur to prevent oxidation?" score="0"/>
+<answer no="3" text="do neither of the above?" score="0"/>
+</screen>
+
+<screen no="10" title="Maturation" text="Will you mature your Cabernet Sauvignon in:"><![CDATA[Full-bodied red wines are generally matured entirely in oak barrels.]]>
+<answer no="1" text="temperature-controlled stainless steel tanks?" score="0"/>
+<answer no="2" text="oak barrels?" score="9"/>
+<answer no="3" text="some time in oak barrels and some time in tanks?" score="3"/>
+</screen>
+
+<screen no="11" title="Stabilising" text="Before bottling, you must decide whether or not to cold stabilise your wine."><![CDATA[When wines cool to a certain temperature, tartrate crystals can often form within the fluid. Some wines are put
+through a cold stabilisation process before bottling. The temperature is brought down, and any crystals that form are
+filtered out. However red wines tend to spend a winter in storage anyway - during this time the ambient temperature
+in the cellar will drop naturally. Any crystals that form at this time will be removed automatically during the clarification
+process before bottling.]]>
+<answer no="1" text="will you do it in order to give the wine a richer colour?" score="3"/>
+<answer no="2" text="will you do it to help remove unwanted crystals?" score="3"/>
+<answer no="3" text="or will you leave your wine to stabilise naturally?" score="9"/>
+</screen>
+
+<screen no="12" title="Tasting Notes" text="Your wine has been assessed according to Wine Show standards. Here is your result."><![CDATA[]]>
+</screen>
+
+</cultivar>
+
+<cultivar id="3" name="chardonnay" title="Full-Bodied Chardonnay">
+<screen no="1" title="Region" text="Where will you pick the grapes for your rich, full-bodied Chardonnay?"><![CDATA[To produce the most richly flavoured and full-bodied Chardonnay the grapes should be grown in a warm climate and
+picked at medium to full ripeness.]]>
+<answer no="1" text="Margaret River, Western Australia" score="9"/>
+<answer no="2" text="Pipers River, Tasmania" score="3"/>
+<answer no="3" text="Swan Hill, Victoria" score="3"/>
+</screen>
+
+<screen no="2" title="Ripeness" text="At what stage of ripening will you pick your Chardonnay grapes?"><![CDATA[Baum&eacute; is a measure of the sugar content of a grape and indicates how ripe it is. Grapes generally range from less
+than 10 Baum&eacute; for a fairly acidic, unripe grape to 13 - 16 Baum&eacute; for a very ripe grape.]]>
+<answer no="1" text="at a sugar level of 11.5 - 13 Baumé" score="9"/>
+<answer no="2" text="at a sugar level of 13 - 14 Baumé" score="5"/>
+<answer no="3" text="at a sugar level of 14 - 16 Baumé" score="0"/>
+</screen>
+
+<screen no="3" title="Picking" text="Bearing in mind production costs as well as quality, will you pick your grapes:"><![CDATA[Hand picking is best for all wine grapes as the grape is less likely to get broken. Once a grape breaks, air gets to the
+juice and the oxidation process begins. Oxidation speeds up as temperatures rise. However, handpicking is very
+expensive, so it is only worth doing for the highest quality wines. For other white wines mechanical harvesters are
+used, but usually at night when the temperature is cooler and the juice less likely to oxidize.]]>
+<answer no="1" text="by hand during the day?" score="3"/>
+<answer no="2" text="mechanically during the day?" score="3"/>
+<answer no="3" text="mechanically at night?" score="9"/>
+</screen>
+
+<screen no="4" title="Temperature" text="When the grapes have reached the winery and been crushed, will you"><![CDATA[ An aromatic light-bodied wine like a Riesling requires only the pure, delicately flavoured grape juice to be fermented.
+The juice is separated from the skins in a press immediately after crushing. When making a fuller, richer white wine,
+like a Semillon or a Chardonnay, the juice can be left with the skins for a few hours, to allow it to pick up extra
+flavouring compounds. The mixture is then pressed, and the juice is sent off to fermentation.]]>
+<answer no="1" text="chill them to protect the flavour?" score="9"/>
+<answer no="2" text="keep them at about room temperature?" score="3"/>
+<answer no="3" text="heat them to destroy bacteria?" score="-32"/>
+</screen>
+
+<screen no="5" title="Press or crush" text="After crushing will you:"><![CDATA[An aromatic light-bodied wine like a Riesling requires only the pure, delicately flavoured grape juice to be fermented.
+The juice is separated from the skins in a press immediately after crushing. When making a fuller, richer white wine,
+like a Semillon or a Chardonnay, the juice can be left with the skins for a few hours, to allow it to pick up extra
+flavouring compounds. The mixture is then pressed, and the juice is sent off to fermentation.]]>
+<answer no="1" text="send the juice and skins straight off to fermentation?" score="-32"/>
+<answer no="2" text="leave the juice on the skins for a few hours before pressing?" score="9"/>
+<answer no="3" text="press the mixture immediately to release the juice?" score="3"/>
+</screen>
+
+<screen no="6" title="Yeast" text="Next you add yeast in order to:"><![CDATA[Once the white grape juice has been pressed and has settled out, it is ready for the fermentation process. Yeast is
+added to the juice, and in a complex biological reaction, the yeast transforms the grape sugar into alcohol, while carbon
+dioxide gas is given off. If all the sugar is allowed to ferment, the alcohol content of the wine will be roughly equal to
+the degrees Baum&eacute; of the original juice i.e. 10 Baum&eacute; is approximately equal to 10% alcohol.]]>
+<answer no="1" text="aid fermentation by creating bubbles?" score="0"/>
+<answer no="2" text="aid fermentation by making the contents 'rise'?" score="0"/>
+<answer no="3" text="aid fermentation by turning the grape sugar into alcohol?" score="9"/>
+</screen>
+
+<screen no="7" title="Ferment temperature" text="What temperature will you ferment the juice at?"><![CDATA[It is important to keep white wine cool at every stage of the production process in order to maintain the fresh fruit
+flavour and colour.]]>
+<answer no="1" text="warm 22 - 30 ºC" score="3"/>
+<answer no="2" text="cool 15 - 18 ºC" score="9"/>
+</screen>
+
+<screen no="8" title="Ferment duration" text="How long will you ferment your Chardonnay for?"><![CDATA[White wine ferments at a cool temperature, so the fermentation process takes longer.]]>
+<answer no="1" text="7 - 10 days" score="0"/>
+<answer no="2" text="10 - 30 days" score="9"/>
+</screen>
+
+<screen no="9" title="Malo-lactic fermentation" text="After fermentation, do you:"><![CDATA[Wines with a fuller body are put through malo-lactic fermentation. This process involves the addition of bacteria
+which transforms the sharp-tasting malic acid, which occurs naturally in the wine, to lactic acid, which is much softer. A
+buttery taste can also be produced from this process. Wines not undergoing malo-lactic fermentation are usually
+treated with sulphur dioxide at this stage to prevent oxidation and any further microbial activity.]]>
+<answer no="1" text="add bacteria to create a malo-lactic fermentation to give a smooth flavour?" score="9"/>
+<answer no="2" text="add sulphur dioxide to prevent oxidation and to protect colour and flavour?" score="3"/>
+<answer no="3" text="do neither of the above?" score="0"/>
+</screen>
+
+<screen no="10" title="Maturation" text="Will you mature your Chardonnay in:"><![CDATA[Full-bodied white wines are matured in temperature-controlled tanks for part of the time and also spend part of the
+time in barrels in order to pick up oaky scents and flavours. Fresh, elegant wines do not spend any time in oak barrels
+at all. The heavy influence of the wood would not suit the lightness of the wine.]]>
+<answer no="1" text="temperature-controlled stainless steel tanks?" score="2"/>
+<answer no="2" text="oak barrels?" score="0"/>
+<answer no="3" text="some time in oak barrels and some time in tanks?" score="9"/>
+</screen>
+
+<screen no="11" title="Stabilising" text="Before bottling, you must decide whether or not to cold stabilise your wine."><![CDATA[When white wines cool to a certain temperature, tartrate crystals can often form in the wine. Although these are
+quite natural and do not affect the taste or quality of the wine, they do take away from the clarity of the wine in the
+glass and therefore its general acceptance. So white wines usually go through a period of cold stabilisation before
+bottling. The temperature is brought down and any crystals that form are filtered out, so when the wine is bottled and
+sold it will be free of crystals.]]>
+<answer no="1" text="will you do it in order to give the wine a richer colour?" score="0"/>
+<answer no="2" text="will you do it to help remove unwanted crystals?" score="9"/>
+<answer no="3" text="or will you leave your wine to stabilise naturally?" score="0"/>
+</screen>
+
+<screen no="12" title="Tasting Notes" text="Your wine has been assessed according to Wine Show standards. Here is your result."><![CDATA[]]>
+</screen>
+
+</cultivar>
+
+<cultivar id="4" name="shiraz" title="Big, Bold Shiraz">
+<screen no="1" title="Region" text="Where will you pick the grapes for your big bold Shiraz?"><![CDATA[ To produce the generous flavours of a bold Shiraz the grapes should be grown in a warm to hot region and picked
+when very ripe.]]>
+<answer no="1" text="Barossa Valley, South Australia" score="9"/>
+<answer no="2" text="Coonawarra, South Australia" score="5"/>
+<answer no="3" text="Yarra Valley, Victoria" score="0"/>
+</screen>
+
+<screen no="2" title="Ripeness" text="At what stage of ripening will you pick your Shiraz grapes?"><![CDATA[Baum&eacute; is a measure of the sugar content of a grape and indicates how ripe it is. Grapes generally range from less
+than 10 Baum&eacute; for a fairly acidic, unripe grape to 13 - 16 Baum&eacute; for a very ripe grape.]]>
+<answer no="1" text="at a sugar level of 11.5 - 13 Baumé" score="-8"/>
+<answer no="2" text="at a sugar level of 13 - 14 Baumé" score="5"/>
+<answer no="3" text="at a sugar level of 14 - 16 Baumé" score="9"/>
+</screen>
+
+<screen no="3" title="Picking" text="Bearing in mind production costs as well as quality, will you pick your grapes:"><![CDATA[Hand picking is best for all wine grapes as the grape is less likely to get broken. Once a grape breaks, air gets to the
+juice and the oxidation process begins. Oxidation speeds up as temperatures rise. This is most dangerous for white
+wine grapes - it means they may lose some of their delicate flavours and the juice may become discoloured. Red
+grapes are not so susceptible to the faults caused by oxidation and so can be harvested mechanically during the day -
+which is both quicker and cheaper.]]>
+<answer no="1" text="by hand during the day?" score="5"/>
+<answer no="2" text="mechanically during the day?" score="9"/>
+<answer no="3" text="mechanically at night?" score="5"/>
+</screen>
+
+<screen no="4" title="Temperature" text="When the grapes have reached the winery and been crushed, will you"><![CDATA[Red grapes usually arrive at the correct temperature and, unlike white grapes, do not need to be chilled during
+production, although temperatures do need to be controlled during hot weather.]]>
+<answer no="1" text="chill them to protect the flavour?" score="0"/>
+<answer no="2" text="keep them at about room temperature?" score="9"/>
+<answer no="3" text="heat them to destroy bacteria?" score="-32"/>
+</screen>
+
+<screen no="5" title="Press or crush" text="After crushing will you:"><![CDATA[Red wines are not generally pressed at all before fermentation. The juice is fermented together with the skins, which
+is where red wine gains its colour. Otherwise the juice would be quite pale, similar to that of white wine. Prolonged
+contact with the skins also allows it to pick up tannins and other important flavours throughout the fermentation period.]]>
+<answer no="1" text="send the juice and skins straight off to fermentation?" score="9"/>
+<answer no="2" text="leave the juice on the skins for a few hours before pressing?" score="-15"/>
+<answer no="3" text="press the mixture immediately to release the juice?" score="-32"/>
+</screen>
+
+<screen no="6" title="Yeast" text="Next you add yeast in order to:"><![CDATA[Once the white grape juice has been pressed and has settled out, it is ready for the fermentation process. Yeast is
+added to the juice, and in a complex biological reaction, the yeast transforms the grape sugar into alcohol, while carbon
+dioxide gas is given off. If all the sugar is allowed to ferment, the alcohol content of the wine will be roughly equal to
+the degrees Baum&eacute; of the original juice i.e. 10 Baum&eacute; is approximately equal to 10% alcohol.]]>
+<answer no="1" text="aid fermentation by creating bubbles?" score="0"/>
+<answer no="2" text="aid fermentation by making the contents 'rise'?" score="0"/>
+<answer no="3" text="aid fermentation by turning the grape sugar into alcohol?" score="9"/>
+</screen>
+
+<screen no="7" title="Ferment temperature" text="What temperature will you ferment the juice at?"><![CDATA[Red wine needs a warm temperature during fermentation to enable it to extract colour, flavours and body from the
+skins.]]>
+<answer no="1" text="warm 22 - 30 ºC" score="9"/>
+<answer no="2" text="cool 15 - 18 ºC" score="3"/>
+</screen>
+
+<screen no="8" title="Ferment duration" text="How long will you ferment your Shiraz for?"><![CDATA[Red wine, fermenting at a higher temperature, completes the fermentation process in less time.]]>
+<answer no="1" text="7 - 10 days" score="9"/>
+<answer no="2" text="10 - 30 days" score="3"/>
+</screen>
+
+<screen no="9" title="Malo-lactic fermentation" text="After fermentation, do you:"><![CDATA[Generally red wines are put through malo-lactic fermentation. This process involves the addition of bacteria that
+transforms the sharp-tasting malic acid, which occurs naturally in the wine, to lactic acid, which is much softer. A
+buttery taste can also be produced from this process. Wines not undergoing malo-lactic fermentation are usually
+treated with sulfur dioxide at this stage to prevent oxidation and any further microbial activity.]]>
+<answer no="1" text="add bacteria to create a malo-lactic fermentation?" score="9"/>
+<answer no="2" text="add sulphur to prevent oxidation?" score="0"/>
+<answer no="3" text="do neither of the above?" score="0"/>
+</screen>
+
+<screen no="10" title="Maturation" text="Will you mature your Shiraz in:"><![CDATA[Full-bodied red wines are generally matured entirely in oak barrels.]]>
+<answer no="1" text="temperature-controlled stainless steel tanks?" score="0"/>
+<answer no="2" text="oak barrels?" score="9"/>
+<answer no="3" text="some time in oak barrels and some time in tanks?" score="3"/>
+</screen>
+
+<screen no="11" title="Stabilising" text="Before bottling, you must decide whether or not to cold stabilise your wine."><![CDATA[When wines cool to a certain temperature, tartrate crystals can often form within the fluid. Some wines are put
+through a cold stabilisation process before bottling. The temperature is brought down, and any crystals that form are
+filtered out. However red wines tend to spend a winter in storage anyway - during this time the ambient temperature
+in the cellar will drop naturally. Any crystals that form at this time will be removed automatically during the clarification
+process before bottling.]]>
+<answer no="1" text="will you do it in order to give the wine a richer colour?" score="3"/>
+<answer no="2" text="will you do it to help remove unwanted crystals?" score="3"/>
+<answer no="3" text="or will you leave your wine to stabilise naturally?" score="9"/>
+</screen>
+
+<screen no="12" title="Tasting Notes" text="Your wine has been assessed according to Wine Show standards. Here is your result."><![CDATA[]]>
+</screen>
+
+</cultivar>
+</cultivars>
+
+<results>
+<wine wine="riesling">
+<result medal="Gold" text="Congratulations! You have made a Gold Medal winning wine. This light, straw coloured Riesling is a classic
+example from this region. It has an elegant bouquet, and is delicious to taste with gentle lime-juice flavours and a
+lingering but clean finish." />
+<result medal="Silver" text="Congratulations! You have made a Silver Medal winning wine. This Riesling has concentrated fruit flavours with
+elegant palate structure, and is dry with a pleasant finish."  />
+<result medal="Bronze" text="Congratulations! You have made a Bronze Medal winning wine It exhibits a stony, lime and citrus-scented
+nose, with fresh, medium-bodied flavours and a clean, tangy finish."  />
+<result medal="Competent" text="A generously flavoured palate with lime and tropical fruit. Very drinkable. While it also has a lingering
+finish it lacks some personality."  />
+<result medal="Average" text="This wine has very little nose or finish. It is unduly reliant on residual sugar to balance the rather stalky
+green flavours. Disappointing."  />
+<result medal="Poison" text="The perfect accompaniment to an appalling meal. May find a niche as a cleansing agent for exterior surfaces.
+Please seek professional advice, or read the hints, before making more wine."  />
+</wine>
+
+<wine wine="cabernet">
+<result medal="Gold" text="Congratulations! You have made a Gold Medal winning wine. This red-purple Cabernet Sauvignon has a rich,
+complex bouquet with blackcurrant, mint and well integrated oak. The palate is sumptuous with chocolate, blackberry
+and blackcurrant flavours, finishing with lingering tannins surrounded by layers of French oak."  />
+<result medal="Silver" text="Congratulations! You have made a Silver Medal winning wine. Its colour is medium to full red-purple, it has a
+fragrant bouquet with spicy oak and berry/briery fruit and on the palate it is a stylish wine with charry oak."  />
+<result medal="Bronze" text="Congratulations! You have won a Bronze Medal for your wine. Medium to full purple-red in colour; the
+bouquet has abundant ripe blackcurrant fruit with vanillan American oak. The palate shows similar smooth fruit on the
+palate, although it falls away fractionally at the finish."  />
+<result medal="Competent" text="Medium red, tinged with brown. Both the bouquet and the palate show rather astringent green leaf and
+earth aromas and flavours. Not bad, not great."  />
+<result medal="Average" text="Quite ordinary. Will go perfectly with any food that will mask its taste. Good Barbeque Red."  />
+<result medal="Poison" text="Fantastically bad. Warrants a public health warning. Resembles some by-product of the petro-chemical
+process. Seek professional help, or read the hints, before making more wine."  />
+</wine>
+
+<wine wine="chardonnay">
+<result medal="Gold" text="Congratulations! You have made a Gold Medal winning wine. This is a medium, yellow-green Chardonnay with a
+complex toasty bouquet showing both barrel ferment and malo-lactic ferment influences. On the palate this has figgy,
+buttery and oatmeal flavours and is mouth filling."  />
+<result medal="Silver" text="Congratulations! You have made a Silver Medal winning wine. It is medium yellow-green in colour with ripe
+melon and white peach fruit evident on the bouquet. The palate is pleasant and round with a creamy texture and taste." />
+<result medal="Bronze" text="Congratulations! You have won a Bronze Medal for your wine. Pale green-yellow in colour with a fragrant melon and white peach bouquet plus a hint of spicy French oak. The palate is clean, fresh and melony."  />
+<result medal="Competent" text="A plain bouquet with some minty aromas leads on to a palate on which melon flavours show through. The
+oak is a touch pedestrian."  />
+<result medal="Average" text="A very ordinary Chardonnay. May be redeemed by its price."  />
+<result medal="Poison" text="Perfect example of the new trend in grape-based disinfectants. Staggeringly awful. Please seek professional
+help, or read the hints, before making more wine."  />
+</wine>
+
+<wine wine="shiraz">
+<result medal="Gold" text="Congratulations! You have made a Gold Medal winning wine. This deep red-purple Shiraz has a voluminous
+bouquet with solid spicy, plum Shiraz aromas backed by well-balanced coconut oak. This is a rich and generous wine on
+the palate with a youthful red berry fruit and a soft finish."  />
+<result medal="Silver" text="Congratulations! You have made a Silver Medal winning wine. Medium to full purple red in colour, there is a
+smooth cherry fruit on the bouquet with hints of vanilla oak. The palate is long, with generous berry flavours, finishing
+with fine tannins."  />
+<result medal="Bronze" text="Congratulations! You have won a Bronze Medal for your wine. The wine is medium purple-red, with a
+chocolate bouquet with liquorice overtones and the palate is dense, heavy and chewy."  />
+<result medal="Competent" text="Medium-red to purple in colour. The wine has earthy and leathery aromas with considerable astringency
+on the palate."  />
+<result medal="Average" text="Surprisingly light colour. A very disappointing bouquet with distinct medicinal aroma. The palate is marginally
+better, but this a very ordinary wine."  />
+<result medal="Poison" text="Appalling. More likely to be sold at garden centres than in wine shops. You have single handedly destroyed the
+reputation of your company. Please seek professional help, or read the hints, before making more wine."  />
+</wine>
+</results>
+
+<medals>
+<medal type="Gold" score="90" />
+<medal type="Silver" score="80" />
+<medal type="Bronze" score="70" />
+<medal type="Average" score="50" />
+<medal type="Poison" score="-100" />
+</medals>
+
+</wines>

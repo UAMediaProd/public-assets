@@ -1,0 +1,99 @@
+<div id="page-colour">
+<h1>Colour</h1>
+<div class="columns show-choices" id="colour-choice"></div>
+<div class="row">
+<div class="small-2 columns">&nbsp;</div>
+<div id="colour-choices" class="small-2 columns">
+    <label for="red-choices">Red</label>
+    <ul id="red-choices" class="colour-choices">
+        <li tabindex=0><div title="purple"></div></li>
+        <li tabindex=0><div title="violet"></div></li>
+        <li tabindex=0><div title="ruby"></div></li>
+        <li tabindex="0"><div title="garnet"></div></li>
+        <li tabindex="0"><div title="red"></div></li>
+        <li tabindex="0"><div title="brick red"></div></li>
+        <li tabindex="0"><div title="tile red"></div></li>
+        <li tabindex="0"><div title="orange red"></div></li>
+        <li tabindex="0"><div title="mahogany"></div></li>
+        <li tabindex="0"><div title="amber"></div></li>
+        <li tabindex="0"><div title="brown"></div></li>
+    </ul>
+    <label for="rose-choices">Rosé</label>
+    <ul id="rose-choices" class="colour-choices">
+        <li tabindex="0"><div title="champagne"></div></li>
+        <li tabindex="0"><div title="rose"></div></li>
+        <li tabindex="0"><div title="violet rose"></div></li>
+        <li tabindex="0"><div title="yellow rose"></div></li>
+        <li tabindex="0"><div title="orange rose"></div></li>
+        <li tabindex="0"><div title="orange pink"></div></li>
+        <li tabindex="0"><div title="pink"></div></li>
+        <li tabindex="0"><div title="salmon"></div></li>
+        <li tabindex="0"><div title="amber"></div></li>
+        <li tabindex="0"><div title="brown"></div></li>
+    </ul>
+    <label for="white-choices">White</label>
+    <ul id="white-choices" class="colour-choices">
+        <li tabindex="0"><div title="colorless"></div></li>
+        <li tabindex="0"><div title="green tinged"></div></li>
+        <li tabindex="0"><div title="green straw"></div></li>
+        <li tabindex="0"><div title="straw"></div></li>
+        <li tabindex="0"><div title="straw yellow"></div></li>
+        <li tabindex="0"><div title="yellow"></div></li>
+        <li tabindex="0"><div title="yellow gold"></div></li>
+        <li tabindex="0"><div title="gold"></div></li>
+        <li tabindex="0"><div title="old gold"></div></li>
+        <li tabindex="0"><div title="amber"></div></li>
+        <li tabindex="0"><div title="brown"></div></li>
+    </ul>
+</div>
+<div class="small-2 columns"></div>
+</div>
+</div>
+
+<script>
+var $pagecolour = $('#page-colour');
+function expandColour(label) {
+    var cur_label = $(label).text();
+
+    $pagecolour.find('label').each(function(idx, label) {
+        var $label = $(label);
+        var $for = $('#' + $label.attr('for'));
+
+        if ($label.text() == cur_label) {
+            $for.removeClass('collapsed')
+                .addClass('expanded');
+        } else {
+            $for.removeClass('expanded')
+                .addClass('collapsed');
+        }
+    });
+
+}
+
+var $colours = $pagecolour.find('li');
+var $colourTooltips = $colours.find('div');
+$pagecolour
+    .delegate('label', 'click', function(evt) {
+        expandColour(evt.target);
+    })
+    .delegate('li', 'click focus', function(evt) {
+        var $li = $(evt.currentTarget);
+        $colours.removeClass('selected');
+        $li.addClass('selected');
+
+        $colourTooltips.removeClass('selected')
+                       .removeClass('hover');
+        var $colour = $li.find('div');
+        $colour.addClass('selected');
+        $('.show-choices').text($colour.attr('title'));
+
+        expandColour("label[for='" + $li.parent().attr('id') + "']");
+    })
+    .delegate('li', 'mouseover mouseout', function(evt) {
+        var $li = $(evt.currentTarget);
+        $colourTooltips.removeClass('hover');
+        if (evt.type == "mouseover") {
+            $li.find('div').addClass('hover');
+        }
+    });
+</script>

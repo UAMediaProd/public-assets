@@ -1,0 +1,14 @@
+<div id="page-summary">
+<div id="wine-summary"></div>
+</div>
+<script>
+// Tasting choices are listed on the index page
+var choices = getChoices('#index li');
+var summary = getSummary(choices);
+$('#wine-summary')
+    .html(summary)
+    .on('click', function(evt) {
+        $(evt.currentTarget).selectText();
+    });
+Cookies.set('wine-summary-choice', summary);
+</script>

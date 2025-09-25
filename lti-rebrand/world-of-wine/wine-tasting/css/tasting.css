@@ -1,0 +1,346 @@
+body {
+    height: auto;
+}
+#content ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+/* footer */
+#footer {
+    border-top: thin solid #999;
+    font-size: 80%;
+    margin-top: 8ex;
+    padding-top: 0.5ex;
+    width: 100%;
+}
+#footer .copyright-link {
+    padding: 0;
+    text-align: left;
+}
+#footer .usage {
+    white-space: nowrap;
+    display: inline-block;
+}
+#footer .references-link {
+    padding: 0;
+    text-align: right;
+}
+
+#index {
+    display: none;
+}
+
+.show-choices {
+    min-height: 3ex;
+}
+
+.instructions strong {
+    font-size: 200%;
+    font-weight: normal;
+}
+
+/* .show-choices is monitored to update cookies, so we can't remove it, however
+ * selected colour is shown with tooltips, so hide this div. */
+#page-colour .show-choices {
+    visibility: hidden;
+}
+#page-colour label {
+    position: relative;
+    left: -4em;
+    top: 0;
+    height: 0;
+    font-weight: bold;
+}
+.colour-choices {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    cursor: pointer;
+}
+.colour-choices li {
+    width: 100%;
+    height: 20px;
+
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    outline: none;
+}
+.colour-choices.collapsed li {
+    height: 3px;
+}
+.colour-choices.expanded li {
+    height: 30px;
+}
+.colour-choices li div {
+    width: 100%;
+    height: 100%;
+}
+.colour-choices li div.selected,
+.colour-choices li div.hover {
+    display: inline;
+    position: relative;
+}
+.colour-choices li div.selected:after,
+.colour-choices li div.hover:after {
+    border-radius: 5px;
+    content: attr(title);
+    white-space: nowrap;
+    padding: 5px 15px;
+    position: absolute;
+    top: -8px;
+    left: 70px;
+
+    background-color: #dbdbdb;
+    color: #333;
+}
+.colour-choices li div.selected:before,
+.colour-choices li div.hover:before {
+    border: solid;
+    border: 6px solid transparent;
+    content: "";
+    position: absolute;
+    bottom: -1em;
+    left: 58px;
+
+    border-right-color: #dbdbdb;
+}
+.colour-choices li div.selected:after {
+    background-color: #333;
+    color: #fff;
+}
+.colour-choices li div.selected:before {
+    border-right-color: #333;
+}
+
+#red-choices li:nth-child(1) {
+    background-color: #a90031;
+}
+#red-choices li:nth-child(2) {
+    background-color: #c30046;
+}
+#red-choices li:nth-child(3) {
+    background-color: #ea0045;
+}
+#red-choices li:nth-child(4) {
+    background-color: #f4293c;
+}
+#red-choices li:nth-child(5) {
+    background-color: #ff394c;
+}
+#red-choices li:nth-child(6) {
+    background-color: #ff2044;
+}
+#red-choices li:nth-child(7) {
+    background-color: #ff2125;
+}
+#red-choices li:nth-child(8) {
+    background-color: #e40025;
+}
+#red-choices li:nth-child(9) {
+    background-color: #c12f27;
+}
+#red-choices li:nth-child(10) {
+    background-color: #b12f27;
+}
+#red-choices li:nth-child(11) {
+    background-color: #982821;
+}
+
+#rose-choices li:nth-child(1) {
+    background-color: #ffe8d6;
+}
+#rose-choices li:nth-child(2) {
+    background-color: #ffd5c4;
+}
+#rose-choices li:nth-child(3) {
+    background-color: #ffada7;
+}
+#rose-choices li:nth-child(4) {
+    background-color: #ffada7;
+}
+#rose-choices li:nth-child(5) {
+    background-color: #ff8590;
+}
+#rose-choices li:nth-child(6) {
+    background-color: #ef7582;
+}
+#rose-choices li:nth-child(7) {
+    background-color: #ff7aa5;
+}
+#rose-choices li:nth-child(8) {
+    background-color: #e56ea5;
+}
+#rose-choices li:nth-child(9) {
+    background-color: #ff8983;
+}
+#rose-choices li:nth-child(10) {
+    background-color: #ff9071;
+}
+
+#white-choices li:nth-child(1) {
+    background-color: #f8f5e4;
+}
+#white-choices li:nth-child(2) {
+    background-color: #f8f5e4;
+}
+#white-choices li:nth-child(3) {
+    background-color: #f3facd;
+}
+#white-choices li:nth-child(4) {
+    background-color: #fef69e;
+}
+#white-choices li:nth-child(5) {
+    background-color: #fdf288;
+}
+#white-choices li:nth-child(6) {
+    background-color: #fdec61;
+}
+#white-choices li:nth-child(7) {
+    background-color: #fddc72;
+}
+#white-choices li:nth-child(8) {
+    background-color: #fbbc5f;
+}
+#white-choices li:nth-child(9) {
+    background-color: #faa454;
+}
+#white-choices li:nth-child(10) {
+    background-color: #fba479;
+}
+#white-choices li:nth-child(11) {
+    background-color: #fb9970;
+}
+
+.accordion-navigation .category:before {
+    content: "\002b ";
+    padding-right: 0.1em;
+}
+.accordion-navigation.active .category:before {
+    content: "\2212 ";
+}
+.accordion-navigation .category {
+    text-transform: capitalize;
+}
+.accordion .accordion-navigation a:link,
+.accordion .accordion-navigation a:visited {
+    opacity: .9;
+}
+.accordion .accordion-navigation a:focus,
+.accordion .accordion-navigation a:hover {
+    opacity: .85;
+}
+.accordion .accordion-navigation a:active {
+    opacity: .75;
+}
+/* http://stackoverflow.com/a/18985783 */
+.accordion .accordion-navigation.active .content {
+    position: relative;
+    z-index: 1;
+}
+.accordion .accordion-navigation.active .content label {
+    color: black;
+    opacity: .9;
+}
+.accordion .accordion-navigation.active .content:before {
+    content: "";
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;  
+    opacity: .65;
+    z-index: -1;
+}
+.accordion-navigation.berry-fruit a:link,
+.accordion-navigation.berry-fruit.active .content:before {
+    background-color: crimson;
+}
+.accordion-navigation.dried-fruit a:link,
+.accordion-navigation.dried-fruit.active .content:before {
+    background-color: lightsalmon;
+}
+.accordion-navigation.citrus-fruit a:link,
+.accordion-navigation.citrus-fruit.active .content:before {
+    background-color: gold;
+}
+.accordion-navigation.tree-fruit a:link,
+.accordion-navigation.tree-fruit.active .content:before {
+    background-color: mediumorchid;
+}
+.accordion-navigation.tropical-fruit a:link,
+.accordion-navigation.tropical-fruit.active .content:before {
+    background-color: darkorange;
+}
+.accordion-navigation.floral a:link,
+.accordion-navigation.floral.active .content:before {
+    background-color: mediumvioletred;
+}
+.accordion-navigation.fresh-vegetal a:link,
+.accordion-navigation.fresh-vegetal.active .content:before {
+    background-color: darkgreen;
+}
+.accordion-navigation.cooked-vegetal a:link,
+.accordion-navigation.cooked-vegetal.active .content:before {
+    background-color: olive;
+}
+.accordion-navigation.dried-vegetal a:link,
+.accordion-navigation.dried-vegetal.active .content:before {
+    background-color: darkolivegreen;
+}
+.accordion-navigation.nutty a:link,
+.accordion-navigation.nutty.active .content:before {
+    background-color: sienna;
+}
+.accordion-navigation.woody a:link,
+.accordion-navigation.woody.active .content:before {
+    background-color: peru;
+}
+.accordion-navigation.caramel a:link,
+.accordion-navigation.caramel.active .content:before {
+    background-color: chocolate;
+}
+.accordion-navigation.spicy a:link,
+.accordion-navigation.spicy.active .content:before {
+    background-color: red;
+}
+.accordion-navigation.savoury a:link,
+.accordion-navigation.savoury.active .content:before {
+    background-color: orangered;
+}
+.accordion-navigation.earthy a:link,
+.accordion-navigation.earthy.active .content:before {
+    background-color: saddlebrown;
+}
+.accordion-navigation.yeasty a:link,
+.accordion-navigation.yeasty.active .content:before {
+    background-color: orange;
+}
+.accordion-navigation.chemical a:link,
+.accordion-navigation.chemical.active .content:before {
+    background-color: lime;
+}
+.accordion-navigation.oxidised a:link,
+.accordion-navigation.oxidised.active .content:before {
+    background-color: cadetblue;
+}
+.accordion-navigation.volatile a:link,
+.accordion-navigation.volatile.active .content:before {
+    background-color: yellowgreen;
+}
+
+.faulty label {
+    color: #dd6734;
+}
+.faulty.key {
+    text-align: right;
+}
+.faulty label:after,
+.faulty.key:before {
+    content: ' *';
+    color: #dd6734;
+}

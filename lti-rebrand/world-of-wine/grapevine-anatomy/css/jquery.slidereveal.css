@@ -1,0 +1,26 @@
+.slidereveal-gui {
+    border-right: 2px solid gray;
+    color: gray;
+    overflow: visible;
+    position: absolute;
+}
+.slidereveal-gui .fa {
+    position: absolute;
+    top: 45%;
+    right: -1em;
+    font-size: 3em;
+    text-shadow: 1px  1px 2px white,
+                -1px -1px 2px white;
+}
+.slidereveal-gui .fa:first-child {
+    right: 0;
+}
+.slidereveal-gui .fa.fa-caret-left {
+    right: 0.01em;
+}
+.slidereveal-gui .fa.fa-caret-right {
+    right: -0.4em;
+}
+.slidereveal-gui .fa.fa-arrows-h {
+    right: -0.5em;
+}
