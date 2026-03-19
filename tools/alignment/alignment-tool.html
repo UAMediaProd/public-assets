@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Alignment Construction Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --clr-ink: #1a2a3a;
+            --clr-ink-light: #3d5269;
+            --clr-ink-muted: #6b7f94;
+            --clr-bg: #f8f7f4;
+            --clr-bg-warm: #f1efe9;
+            --clr-bg-card: #ffffff;
+            --clr-accent-a: #1b6b5a;
+            --clr-accent-a-light: #e6f2ef;
+            --clr-accent-b: #2a5a8f;
+            --clr-accent-b-light: #e4edf7;
+            --clr-border: #ddd8ce;
+            --clr-highlight: #d4a853;
+            --font-display: 'Fraunces', Georgia, serif;
+            --font-body: 'Source Sans 3', 'Segoe UI', sans-serif;
+            --w-max: 1120px;
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.75rem;
+            --space-lg: 3rem;
+            --space-xl: 5rem;
+            --radius: 10px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--clr-ink);
+            background: var(--clr-bg);
+            line-height: 1.72;
+            font-size: 17px;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: var(--w-max); margin: 0 auto; padding: 0 var(--space-md); }
+        .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+
+        /* --- Header --- */
+        header {
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid var(--clr-border);
+            background: var(--clr-bg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-sm);
+        }
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 1.05rem;
+            color: var(--clr-ink);
+            letter-spacing: -0.02em;
+        }
+        .logo span { color: var(--clr-accent-a); }
+        header nav a {
+            font-size: 0.88rem;
+            color: var(--clr-ink-muted);
+            text-decoration: none;
+            margin-left: var(--space-md);
+            transition: color 0.2s;
+        }
+        header nav a:hover, header nav a:focus { color: var(--clr-accent-a); }
+
+        /* --- Hero --- */
+        .hero {
+            padding: var(--space-lg) 0 var(--space-md);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -80px; right: -120px;
+            width: 480px; height: 480px;
+            background: radial-gradient(circle, rgba(27,107,90,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; left: -80px;
+            width: 360px; height: 360px;
+            background: radial-gradient(circle, rgba(42,90,143,0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .hero-content { position: relative; max-width: 720px; margin: 0 auto; }
+        .hero-label {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            color: var(--clr-accent-a);
+            margin-bottom: var(--space-sm);
+            background: var(--clr-accent-a-light);
+            padding: 5px 14px;
+            border-radius: 20px;
+        }
+        h1 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(2rem, 4.5vw, 2.8rem);
+            line-height: 1.18;
+            letter-spacing: -0.025em;
+            color: var(--clr-ink);
+            margin-bottom: var(--space-sm);
+        }
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--clr-ink-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.75;
+        }
+
+        /* --- CTA (front and centre) --- */
+        .cta-section {
+            text-align: center;
+            padding: var(--space-md) 0 var(--space-lg);
+            position: relative;
+        }
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-md);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 18px 36px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s;
+        }
+        .btn-a {
+            background: var(--clr-accent-a);
+            color: #fff;
+        }
+        .btn-a:hover, .btn-a:focus {
+            background: #155a4b;
+            box-shadow: 0 6px 24px rgba(27,107,90,0.25);
+            transform: translateY(-1px);
+        }
+        .btn-b {
+            background: var(--clr-accent-b);
+            color: #fff;
+        }
+        .btn-b:hover, .btn-b:focus {
+            background: #1f4a78;
+            box-shadow: 0 6px 24px rgba(42,90,143,0.25);
+            transform: translateY(-1px);
+        }
+        .btn-arrow { font-size: 1.2rem; transition: transform 0.2s; }
+        .btn:hover .btn-arrow { transform: translateX(3px); }
+
+        .help-text {
+            background: var(--clr-bg-warm);
+            border-radius: var(--radius);
+            padding: var(--space-md);
+            max-width: 580px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .help-text h3 {
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: var(--space-xs);
+            color: var(--clr-ink-muted);
+        }
+        .help-text p {
+            font-size: 0.93rem;
+            color: var(--clr-ink-light);
+            padding: 4px 0;
+        }
+        .help-text strong { color: var(--clr-ink); }
+
+        /* --- Hero info links --- */
+        .hero-link-btn {
+            background: none;
+            border: none;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            color: var(--clr-accent-a);
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            font-weight: 500;
+            padding: 0;
+            transition: color 0.2s;
+        }
+        .hero-link-btn:hover {
+            color: var(--clr-ink);
+        }
+
+        /* --- Modal --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(26, 42, 58, 0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-md);
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--clr-bg-card);
+            border-radius: var(--radius);
+            padding: var(--space-lg) var(--space-md);
+            max-width: 580px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            animation: modalIn 0.25s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(16px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-close {
+            position: absolute;
+            top: var(--space-sm);
+            right: var(--space-sm);
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--clr-ink-muted);
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background 0.2s, color 0.2s;
+        }
+        .modal-close:hover {
+            background: var(--clr-bg-warm);
+            color: var(--clr-ink);
+        }
+        .modal-title {
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 1.3rem;
+            margin-bottom: var(--space-sm);
+            padding-right: 2rem;
+        }
+        .modal-content p {
+            color: var(--clr-ink-light);
+            font-size: 0.95rem;
+            line-height: 1.75;
+        }
+        .modal-content p + p {
+            margin-top: 0.75rem;
+        }
+
+        /* --- Benefit cards --- */
+        .benefit-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+            max-width: 780px;
+            margin: 0 auto var(--space-md);
+            text-align: left;
+        }
+        .benefit-card {
+            padding: var(--space-md);
+            border-radius: var(--radius);
+            border: 1px solid var(--clr-border);
+            background: var(--clr-bg-card);
+            position: relative;
+            overflow: hidden;
+        }
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+        }
+        .benefit-card--a::before { background: var(--clr-accent-a); }
+        .benefit-card--b::before { background: var(--clr-accent-b); }
+        .benefit-tag {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 5px;
+            margin-bottom: 0.6rem;
+        }
+        .benefit-tag--a { background: var(--clr-accent-a-light); color: var(--clr-accent-a); }
+        .benefit-tag--b { background: var(--clr-accent-b-light); color: var(--clr-accent-b); }
+        .benefit-card p {
+            font-size: 0.93rem;
+            color: var(--clr-ink-light);
+            line-height: 1.7;
+        }
+        .benefit-card strong { color: var(--clr-ink); }
+        .benefit-for {
+            font-weight: 500;
+            color: var(--clr-ink);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        /* --- Guide links in benefit cards --- */
+        .benefit-guide-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.85rem;
+            padding: 0.45rem 0.85rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .benefit-card--a .benefit-guide-link {
+            color: var(--clr-accent-a);
+            background: var(--clr-accent-a-light);
+        }
+        .benefit-card--a .benefit-guide-link:hover {
+            background: var(--clr-accent-a);
+            color: #fff;
+        }
+        .benefit-card--b .benefit-guide-link {
+            color: var(--clr-accent-b);
+            background: var(--clr-accent-b-light);
+        }
+        .benefit-card--b .benefit-guide-link:hover {
+            background: var(--clr-accent-b);
+            color: #fff;
+        }
+        .benefit-guide-link svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        /* --- Video placeholder --- */
+        .video-placeholder {
+            margin-top: var(--space-md);
+            border: 2px dashed var(--clr-border);
+            border-radius: var(--radius);
+            background: var(--clr-bg-warm);
+            padding: var(--space-lg) var(--space-md);
+            text-align: center;
+            color: var(--clr-ink-muted);
+        }
+        .video-placeholder-icon {
+            font-size: 2.4rem;
+            margin-bottom: var(--space-sm);
+            opacity: 0.5;
+        }
+        .video-placeholder p {
+            font-size: 0.93rem;
+            max-width: 420px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .video-placeholder p strong {
+            color: var(--clr-ink-light);
+        }
+
+        /* --- Accordion sections --- */
+        .accordion-area {
+            padding: 0 0 var(--space-xl);
+        }
+        .accordion-area .container {
+            max-width: 960px;
+        }
+        .accordion-area-label {
+            text-align: center;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            color: var(--clr-ink-muted);
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--clr-border);
+        }
+
+        details.accordion {
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius);
+            background: var(--clr-bg-card);
+            margin-bottom: var(--space-sm);
+            overflow: hidden;
+            transition: box-shadow 0.3s;
+        }
+        details.accordion[open] {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+
+        details.accordion summary {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-md);
+            cursor: pointer;
+            list-style: none;
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 1.15rem;
+            color: var(--clr-ink);
+            user-select: none;
+            transition: background 0.2s;
+            background: var(--clr-bg-warm);
+            border-bottom: 1px solid transparent;
+        }
+        details.accordion[open] summary {
+            border-bottom: 1px solid var(--clr-border);
+        }
+        details.accordion summary::-webkit-details-marker { display: none; }
+        details.accordion summary::marker { content: ''; }
+
+        details.accordion summary:hover {
+            background: #eae7df;
+        }
+
+        .accordion-icon {
+            flex-shrink: 0;
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+        .accordion--how-works .accordion-icon { background: var(--clr-accent-a-light); color: var(--clr-accent-a); }
+        .accordion--use-cases .accordion-icon { background: #fef3e0; color: #b8860b; }
+        .accordion--research .accordion-icon { background: var(--clr-accent-b-light); color: var(--clr-accent-b); }
+
+        .accordion-title-text { flex: 1; }
+        .accordion-subtitle {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: var(--clr-ink-muted);
+            margin-top: 2px;
+        }
+
+        .accordion-chevron {
+            flex-shrink: 0;
+            width: 20px; height: 20px;
+            transition: transform 0.3s;
+            color: var(--clr-ink-muted);
+        }
+        details.accordion[open] .accordion-chevron {
+            transform: rotate(180deg);
+        }
+
+        .accordion-body {
+            padding: 0 var(--space-md) var(--space-md);
+        }
+
+        /* --- Content inside accordions --- */
+        h2 { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.3rem, 2.5vw, 1.6rem); line-height: 1.3; margin-bottom: var(--space-md); }
+        h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.15rem; margin-bottom: var(--space-sm); }
+
+        .section-divider {
+            width: 48px; height: 3px;
+            background: var(--clr-highlight);
+            border-radius: 2px;
+            margin-bottom: var(--space-md);
+        }
+
+        /* Streams grid */
+        .streams-intro {
+            color: var(--clr-ink-light);
+            max-width: 680px;
+            margin-bottom: var(--space-md);
+        }
+        .streams-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+        .stream-card {
+            background: var(--clr-bg-warm);
+            border-radius: var(--radius);
+            padding: var(--space-md);
+            border: 1px solid var(--clr-border);
+            position: relative;
+            overflow: hidden;
+        }
+        .stream-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+        }
+        .stream-card--a::before { background: var(--clr-accent-a); }
+        .stream-card--b::before { background: var(--clr-accent-b); }
+
+        .stream-tag {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 5px;
+            margin-bottom: var(--space-sm);
+        }
+        .stream-card--a .stream-tag { background: var(--clr-accent-a-light); color: var(--clr-accent-a); }
+        .stream-card--b .stream-tag { background: var(--clr-accent-b-light); color: var(--clr-accent-b); }
+
+        .stream-card h3 { font-size: 1.2rem; }
+        .stream-card .best-for {
+            font-style: italic;
+            color: var(--clr-ink-muted);
+            margin-bottom: var(--space-sm);
+            font-size: 0.95rem;
+        }
+        .stream-card p { color: var(--clr-ink-light); font-size: 0.95rem; line-height: 1.7; }
+        .stream-card p + p { margin-top: 0.65rem; }
+        .stream-label {
+            font-weight: 600;
+            color: var(--clr-ink);
+            display: block;
+            margin-top: var(--space-sm);
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+
+        .callout {
+            background: linear-gradient(135deg, var(--clr-accent-a-light), #f0f4e8);
+            border-left: 4px solid var(--clr-accent-a);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            padding: var(--space-md);
+            margin-top: var(--space-md);
+        }
+        .callout p { color: var(--clr-ink-light); font-size: 0.97rem; }
+        .callout strong { color: var(--clr-ink); }
+
+        /* Use cases */
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+        .use-case {
+            background: var(--clr-bg-warm);
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius);
+            padding: var(--space-md);
+        }
+        .use-case-icon {
+            width: 44px; height: 44px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: var(--space-sm);
+        }
+        .use-case:nth-child(1) .use-case-icon { background: var(--clr-accent-a-light); }
+        .use-case:nth-child(2) .use-case-icon { background: #fef3e0; }
+        .use-case:nth-child(3) .use-case-icon { background: var(--clr-accent-b-light); }
+        .use-case h3 { font-size: 1.05rem; }
+        .use-case p { color: var(--clr-ink-light); font-size: 0.93rem; }
+
+        .collab-block {
+            background: var(--clr-bg-warm);
+            border-radius: var(--radius);
+            padding: var(--space-md);
+            display: flex;
+            gap: var(--space-md);
+        }
+        .collab-block > div { flex: 1; }
+        .collab-block h3 { font-size: 1rem; }
+        .collab-block p { color: var(--clr-ink-light); font-size: 0.93rem; }
+
+        /* Research */
+        .research-interests {
+            columns: 2;
+            column-gap: var(--space-md);
+            margin: var(--space-md) 0;
+        }
+        .research-interests li {
+            color: var(--clr-ink-light);
+            font-size: 0.95rem;
+            padding: 6px 0;
+            break-inside: avoid;
+            list-style: none;
+            position: relative;
+            padding-left: 1.4rem;
+        }
+        .research-interests li::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 14px;
+            width: 6px; height: 6px;
+            background: var(--clr-highlight);
+            border-radius: 50%;
+        }
+        .research-participate {
+            padding: var(--space-md);
+            background: var(--clr-bg-warm);
+            border-radius: var(--radius);
+            border: 1px solid var(--clr-border);
+        }
+        .research-participate p { color: var(--clr-ink-light); font-size: 0.95rem; }
+        .research-participate ul {
+            list-style: none;
+            margin: var(--space-sm) 0;
+        }
+        .research-participate li {
+            padding: 5px 0 5px 1.4rem;
+            position: relative;
+            color: var(--clr-ink-light);
+            font-size: 0.95rem;
+        }
+        .research-participate li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--clr-accent-a);
+            font-weight: 600;
+        }
+        .consent-link {
+            display: inline-block;
+            margin-top: var(--space-sm);
+            color: var(--clr-accent-a);
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .consent-link:hover { color: var(--clr-ink); }
+        .voluntary-note {
+            margin-top: var(--space-sm);
+            font-size: 0.88rem;
+            color: var(--clr-ink-muted);
+            font-style: italic;
+        }
+
+        /* --- Footer --- */
+        footer {
+            border-top: 1px solid var(--clr-border);
+            padding: var(--space-md) 0;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--clr-ink-muted);
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            opacity: 0;
+            animation: fadeUp 0.6s ease forwards;
+        }
+        .fade-in:nth-child(1) { animation-delay: 0.05s; }
+        .fade-in:nth-child(2) { animation-delay: 0.12s; }
+        .fade-in:nth-child(3) { animation-delay: 0.2s; }
+        .fade-in:nth-child(4) { animation-delay: 0.28s; }
+
+        /* --- Responsive --- */
+        @media (max-width: 860px) {
+            .streams-grid { grid-template-columns: 1fr; }
+            .use-cases-grid { grid-template-columns: 1fr; }
+            .research-interests { columns: 1; }
+            .collab-block { flex-direction: column; }
+            .benefit-cards { grid-template-columns: 1fr; }
+            header nav a { margin-left: var(--space-sm); font-size: 0.82rem; }
+        }
+        @media (max-width: 540px) {
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .btn { width: 100%; justify-content: center; max-width: 380px; }
+            header nav { display: none; }
+        }
+
+        /* Focus styles */
+        a:focus-visible, .btn:focus-visible, summary:focus-visible {
+            outline: 3px solid var(--clr-highlight);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header role="banner">
+        <div class="container header-inner">
+            <div class="logo">Alignment <span>Construction</span> Tool</div>
+            <nav aria-label="Main navigation">
+                <a href="#start">Get Started</a>
+                <a href="#learn-more">Learn More</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero" aria-labelledby="hero-heading">
+            <div class="container">
+                <div class="hero-content">
+                    <span class="hero-label fade-in">Curriculum Design Tool</span>
+                    <h1 id="hero-heading" class="fade-in">The Alignment Construction&nbsp;Tool</h1>
+                    <p class="hero-subtitle fade-in">How do you know if your outcomes, assignments, and rubrics are truly aligned? This tool visualises the connections between your Course Learning Outcomes and assignments. Start from whichever component feels most natural and see how changes affect your entire course&nbsp;design.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Compact info links (open modals) -->
+        <div class="hero-links fade-in" style="text-align:center; margin-top: var(--space-sm); padding-bottom: var(--space-sm);">
+            <div class="container">
+                <button class="hero-link-btn" onclick="openModal('modal-why')">Why use this tool?</button>
+                <span style="color: var(--clr-border); margin: 0 0.4rem;">|</span>
+                <button class="hero-link-btn" onclick="openModal('modal-terminology')">A note on terminology</button>
+            </div>
+        </div>
+
+        <!-- Modal: Why use this tool -->
+        <div class="modal-overlay" id="modal-why" onclick="closeModal(event, 'modal-why')" role="dialog" aria-labelledby="modal-why-title" aria-modal="true">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <button class="modal-close" onclick="closeModal(event, 'modal-why')" aria-label="Close">&times;</button>
+                <h2 id="modal-why-title" class="modal-title">Why Use This Tool?</h2>
+                <p>Course design involves many interrelated decisions: how much weight each learning outcome carries, how assignments are structured, and how rubric criteria map back to outcomes. In practice, these decisions are often made separately, and small misalignments can compound across a course without being&nbsp;visible.</p>
+                <p>This tool makes those relationships explicit. By entering your estimates for CLO weightings and assignment mappings (or vice versa), you can see immediately whether the structure of your course reflects your intentions. Where it does not, the tool highlights the discrepancy so you can make informed adjustments before finalising your course&nbsp;design.</p>
+            </div>
+        </div>
+
+        <!-- Modal: Terminology -->
+        <div class="modal-overlay" id="modal-terminology" onclick="closeModal(event, 'modal-terminology')" role="dialog" aria-labelledby="modal-term-title" aria-modal="true">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <button class="modal-close" onclick="closeModal(event, 'modal-terminology')" aria-label="Close">&times;</button>
+                <h2 id="modal-term-title" class="modal-title">A Note on Terminology</h2>
+                <p>This tool uses the term <strong>CLO</strong> (Course Learning Outcome). At your institution these may be called ILOs (Intended Learning Outcomes), ULOs (Unit Learning Outcomes), SLOs (Subject Learning Outcomes), or similar. They all refer to the learning outcomes at the subject or course level: the individual unit of study that sits within a degree programme.</p>
+                <p>This tool also uses the term <strong>assignment</strong> interchangeably with <strong>assessment</strong>. Both refer to the tasks students complete that are used to evaluate their learning.</p>
+            </div>
+        </div>
+
+        <!-- CTA — front and centre -->
+        <section id="start" class="cta-section" aria-labelledby="cta-heading">
+            <div class="container">
+                <h2 id="cta-heading" class="fade-in" style="margin-bottom: var(--space-sm);">Choose Your Pathway</h2>
+
+                <div class="cta-buttons fade-in">
+                    <a href="[your-stream-a-url]" class="btn btn-a">
+                        Stream A: Learning Outcomes → Assignments
+                        <span class="btn-arrow" aria-hidden="true">→</span>
+                    </a>
+                    <a href="[your-stream-b-url]" class="btn btn-b">
+                        Stream B: Assignments → Learning Outcomes
+                        <span class="btn-arrow" aria-hidden="true">→</span>
+                    </a>
+                </div>
+
+                <div class="benefit-cards fade-in">
+                    <div class="benefit-card benefit-card--a">
+                        <span class="benefit-tag benefit-tag--a">Stream A</span>
+                        <p class="benefit-for">Choose this if you have well-defined CLOs and want to test their&nbsp;distribution.</p>
+                        <p>Get data-driven recommendations on <strong>assignment weightings</strong> and <strong>rubric criteria composition</strong> based on how you distribute your CLOs, turning your intended emphasis into concrete marking&nbsp;structures.</p>
+                        <a href="[your-stream-a-guide-url]" class="benefit-guide-link">
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 2h8l4 4v8H2z"/><path d="M10 2v4h4"/></svg>
+                            First time? View the step-by-step guide
+                        </a>
+                    </div>
+                    <div class="benefit-card benefit-card--b">
+                        <span class="benefit-tag benefit-tag--b">Stream B</span>
+                        <p class="benefit-for">Choose this if your assignment strategy is clearer than your CLO&nbsp;emphasis.</p>
+                        <p>See whether the <strong>suggested CLO weightings</strong> reflect your intended emphasis, then evaluate them against the energy each CLO demands in your teaching sequence, revealing gaps between design and&nbsp;delivery.</p>
+                        <a href="[your-stream-b-guide-url]" class="benefit-guide-link">
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 2h8l4 4v8H2z"/><path d="M10 2v4h4"/></svg>
+                            First time? View the step-by-step guide
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collapsible detail sections -->
+        <section id="learn-more" class="accordion-area" aria-label="More information">
+            <div class="container">
+                <p class="accordion-area-label">Learn more about the tool</p>
+
+                <!-- Accordion 1: How The Tool Works -->
+                <details class="accordion accordion--how-works">
+                    <summary>
+                        <span class="accordion-icon" aria-hidden="true">⇄</span>
+                        <span class="accordion-title-text">
+                            How The Tool Works: Two Pathways
+                            <span class="accordion-subtitle">What you provide, what the tool calculates, and how to iterate</span>
+                        </span>
+                        <svg class="accordion-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+                    </summary>
+                    <div class="accordion-body">
+                        <p class="streams-intro">The tool offers two streams depending on where you want to start. <strong>Note:</strong> You cannot switch between streams, so choose the pathway that matches your current&nbsp;thinking.</p>
+
+                        <div class="streams-grid">
+                            <article class="stream-card stream-card--a">
+                                <span class="stream-tag">Stream A</span>
+                                <h3>Start with Learning&nbsp;Outcomes</h3>
+                                <p class="best-for">Best for educators who have clear CLOs and want to test how they distribute across&nbsp;assignments.</p>
+
+                                <span class="stream-label">You provide:</span>
+                                <p><strong>CLO weightings</strong>: Estimate the relative importance of each CLO as percentages (e.g., CLO1: 30%, CLO2: 25%).</p>
+                                <p><strong>CLO mapping to assignments</strong>: Indicate the relative importance of each CLO assessed in each&nbsp;assignment.</p>
+
+                                <span class="stream-label">The tool calculates:</span>
+                                <p><strong>Estimated assignment weights</strong>: Based on your CLO distribution, the tool suggests what each assignment should&nbsp;weigh.</p>
+                                <p><strong>Rubric criteria composition</strong>: The estimated CLO influence within each assignment's rubric, indicating how marking criteria should be distributed across&nbsp;CLOs.</p>
+
+                                <span class="stream-label">You then evaluate:</span>
+                                <p>Do these outputs match your intuition? If not, iterate by adjusting your inputs until the outputs align with what you believe the course should&nbsp;achieve.</p>
+                            </article>
+
+                            <article class="stream-card stream-card--b">
+                                <span class="stream-tag">Stream B</span>
+                                <h3>Start with Assignments</h3>
+                                <p class="best-for">Best for educators who have strong clarity about their assignment tasks and rubric&nbsp;criteria.</p>
+
+                                <span class="stream-label">You provide:</span>
+                                <p><strong>Assignment criteria mapped to CLOs</strong>: For each assignment, list your criteria and indicate which CLO each criterion assesses, plus a total marks value for that criterion.</p>
+                                <p><strong>Assignment weights</strong>: Input the weighting of each assignment&nbsp;task.</p>
+
+                                <span class="stream-label">The tool calculates:</span>
+                                <p><strong>CLO weightings</strong>: Based on your assignment structure, the tool suggests how much each CLO contributes to the overall course&nbsp;grade.</p>
+
+                                <span class="stream-label">You then evaluate:</span>
+                                <p>Do these CLO weightings match your intended emphasis? If not, iterate by adjusting your assignment criteria or weights until the CLO distribution reflects your course's&nbsp;priorities.</p>
+                            </article>
+                        </div>
+
+                        <div class="callout" role="note">
+                            <p><strong>Iteration is key.</strong> The tool is designed for iteration, not perfection on the first try. Each iteration deepens your understanding of how your course components interact, exactly the process we encourage in learners through constructive&nbsp;alignment.</p>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; margin-top: 1.25rem; flex-wrap: wrap;">
+                            <a href="[your-stream-a-guide-url]" class="benefit-guide-link" style="color: var(--clr-accent-a); background: var(--clr-accent-a-light);">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="width:14px;height:14px"><path d="M2 2h8l4 4v8H2z"/><path d="M10 2v4h4"/></svg>
+                                Stream A: Step-by-step guide
+                            </a>
+                            <a href="[your-stream-b-guide-url]" class="benefit-guide-link" style="color: var(--clr-accent-b); background: var(--clr-accent-b-light);">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="width:14px;height:14px"><path d="M2 2h8l4 4v8H2z"/><path d="M10 2v4h4"/></svg>
+                                Stream B: Step-by-step guide
+                            </a>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- Accordion 2: How to Use This Tool -->
+                <details class="accordion accordion--use-cases">
+                    <summary>
+                        <span class="accordion-icon" aria-hidden="true">◇</span>
+                        <span class="accordion-title-text">
+                            When to Use This Tool
+                            <span class="accordion-subtitle">Use cases for verification, redevelopment, and new course design</span>
+                        </span>
+                        <svg class="accordion-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+                    </summary>
+                    <div class="accordion-body">
+                        <div class="use-cases-grid">
+                            <article class="use-case">
+                                <div class="use-case-icon" aria-hidden="true">✓</div>
+                                <h3>Verification</h3>
+                                <p>Test your existing course design. Input your current CLO weightings and assignment mappings to see if the calculated outputs match what you've already designed.</p>
+                            </article>
+                            <article class="use-case">
+                                <div class="use-case-icon" aria-hidden="true">⟳</div>
+                                <h3>Course Redevelopment</h3>
+                                <p>Evaluate existing courses alongside new ideas. See how proposed changes affect the entire system before committing to&nbsp;revisions.</p>
+                            </article>
+                            <article class="use-case">
+                                <div class="use-case-icon" aria-hidden="true">✦</div>
+                                <h3>New Course Design</h3>
+                                <p>Use the tool as a structural scaffold. Start with what you know best and let the tool guide decisions about the other&nbsp;components.</p>
+                            </article>
+                        </div>
+
+                        <div class="collab-block">
+                            <div>
+                                <h3>🔹 Solo Use</h3>
+                                <p>Work through the tool independently, iterating until you're satisfied with the alignment.</p>
+                            </div>
+                            <div>
+                                <h3>🔹 Collaborative Use</h3>
+                                <p>The most powerful application involves conversation with a Learning Designer who can ask questions that provoke deeper thinking about your course&nbsp;design.</p>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- Accordion 3: Research -->
+                <details class="accordion accordion--research">
+                    <summary>
+                        <span class="accordion-icon" aria-hidden="true">🔬</span>
+                        <span class="accordion-title-text">
+                            Help Us with Our Research
+                            <span class="accordion-subtitle">Contribute to understanding how educators engage with constructive alignment</span>
+                        </span>
+                        <svg class="accordion-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="5 8 10 13 15 8"/></svg>
+                    </summary>
+                    <div class="accordion-body">
+                        <p style="color: var(--clr-ink-light); max-width: 680px;">We're conducting research to better understand how educators engage with the alignment process. We're particularly interested&nbsp;in:</p>
+
+                        <ul class="research-interests" role="list">
+                            <li>How educators decide where to begin when designing or revising courses</li>
+                            <li>What difference it makes (practically and affectively) where you begin</li>
+                            <li>How it feels to assign numerical values to CLO weightings or assignment criteria</li>
+                            <li>How it feels when the tool generates numerical estimates based on your inputs</li>
+                            <li>What you notice when adjusting one input changes outputs elsewhere</li>
+                            <li>Whether iterating with the tool influences your thinking about course design</li>
+                            <li>What challenges or insights emerge through the process</li>
+                        </ul>
+
+                        <div class="research-participate">
+                            <p>If you'd like to contribute, after using the tool you can choose&nbsp;to:</p>
+                            <ul role="list">
+                                <li>Complete a brief survey about your experience</li>
+                                <li>Participate in a follow-up interview to discuss how the tool influenced your thinking</li>
+                            </ul>
+                            <a href="[your-consent-form-url]" class="consent-link">Learn more and provide consent for research participation →</a>
+                            <p class="voluntary-note">Your participation is entirely voluntary. You can use the tool without participating in the research. We value honest feedback (whether the tool was helpful, confusing, confirmatory, or surprising). All research data will be kept&nbsp;confidential.</p>
+                        </div>
+                    </div>
+                </details>
+
+            </div>
+        </section>
+    </main>
+
+    <footer role="contentinfo">
+        <div class="container">
+            <p>The Alignment Construction Tool &middot; An educational research project</p>
+        </div>
+    </footer>
+
+    <script>
+    function openModal(id) {
+        document.getElementById(id).classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal(event, id) {
+        document.getElementById(id).classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay.open').forEach(function(m) {
+                m.classList.remove('open');
+            });
+            document.body.style.overflow = '';
+        }
+    });
+    </script>
+
+</body>
+</html>

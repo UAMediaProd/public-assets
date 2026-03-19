@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stream B Walkthrough: Alignment Construction Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#1a2a3a;--ink-light:#3d5269;--ink-muted:#6b7f94;
+  --bg:#f8f7f4;--bg-warm:#f1efe9;--bg-card:#fff;
+  --accent:#2a5a8f;--accent-light:#e4edf7;--accent-hover:#1f4a78;
+  --green:#1b6b5a;--green-light:#e6f2ef;
+  --gold:#d4a853;--gold-light:#fef8eb;
+  --border:#ddd8ce;
+  --tool-navy:#1e1e3f;--tool-pink:#c0392b;--tool-green:#27ae60;--tool-purple:#6c5ce7;--tool-bg:#f5f3ff;
+  --font-display:'Fraunces',Georgia,serif;
+  --font-body:'Source Sans 3','Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --radius:10px;--radius-sm:6px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);color:var(--ink);background:var(--bg);line-height:1.72;font-size:17px;-webkit-font-smoothing:antialiased}
+.pw{max-width:900px;margin:0 auto;padding:0 1.5rem}
+
+.hd{padding:.85rem 0;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100}
+.hd .pw{display:flex;align-items:center;justify-content:space-between}
+.hd-logo{font-family:var(--font-display);font-weight:600;font-size:.95rem;color:var(--ink)}
+.hd-logo span{color:var(--accent)}
+.hd-back{font-size:.85rem;color:var(--accent);text-decoration:none;font-weight:500}
+.hd-back:hover{text-decoration:underline}
+
+.hero{padding:2.5rem 0 1.5rem;text-align:center}
+.hero-tag{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);background:var(--accent-light);padding:4px 14px;border-radius:20px;margin-bottom:1rem}
+.hero h1{font-family:var(--font-display);font-weight:700;font-size:clamp(1.5rem,3.5vw,2.1rem);line-height:1.2;letter-spacing:-.02em;margin-bottom:.75rem}
+.hero p{color:var(--ink-light);max-width:600px;margin:0 auto;font-size:1.02rem}
+
+.snav{position:sticky;top:52px;z-index:99;background:var(--bg);padding:.85rem 0 .75rem;border-bottom:1px solid var(--border)}
+.snav-inner{display:flex;align-items:center;gap:.25rem;justify-content:center;flex-wrap:wrap}
+.sp{display:flex;align-items:center;gap:.25rem;cursor:pointer;padding:6px 12px;border-radius:20px;font-size:.82rem;font-weight:500;color:var(--ink-muted);background:0 0;border:1px solid transparent;transition:all .25s}
+.sp:hover{color:var(--ink-light);background:var(--bg-warm)}
+.sp.on{color:var(--accent);background:var(--accent-light);border-color:rgba(42,90,143,.2);font-weight:600}
+.sp-n{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:.72rem;font-weight:700;background:var(--border);color:var(--ink-muted);transition:all .25s}
+.sp.on .sp-n{background:var(--accent);color:#fff}
+.sp-l{display:none}
+@media(min-width:700px){.sp-l{display:inline}}
+
+.steps{padding:2rem 0 4rem}
+.panel{display:none;animation:fadeIn .4s ease}
+.panel.on{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.sh{margin-bottom:1.5rem}
+.sh-num{font-size:.72rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+.sh h2{font-family:var(--font-display);font-weight:600;font-size:1.5rem;line-height:1.25;letter-spacing:-.015em}
+.sh p{color:var(--ink-light);margin-top:.5rem;max-width:680px}
+
+.tm{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin:1.5rem 0;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.tm-bar{background:var(--tool-bg);border-bottom:1px solid var(--border);padding:.6rem 1.25rem;display:flex;align-items:center;gap:.5rem}
+.tm-dot{width:10px;height:10px;border-radius:50%}
+.tm-dot:nth-child(1){background:#e74c3c}.tm-dot:nth-child(2){background:#f39c12}.tm-dot:nth-child(3){background:#2ecc71}
+.tm-title{font-size:.78rem;color:var(--ink-muted);margin-left:.5rem;font-family:var(--font-mono)}
+.tm-body{padding:1.5rem}
+.tm-body-sm{padding:1rem 1.25rem}
+
+.ts-label{font-family:var(--font-display);font-weight:600;font-size:1.15rem;color:var(--tool-navy);margin-bottom:.3rem}
+.ts-label .n{color:var(--tool-purple)}
+.ts-ul{width:36px;height:3px;background:var(--tool-purple);border-radius:2px;margin-bottom:1rem}
+.ts-desc{font-size:.9rem;color:var(--ink-muted);margin-bottom:1rem}
+.ts-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem}
+
+.st{width:100%;border-collapse:collapse;font-size:.9rem}
+.st th{text-align:left;font-weight:600;color:var(--ink-muted);padding:.6rem .75rem;border-bottom:2px solid var(--border);font-size:.82rem}
+.st td{padding:.6rem .75rem;border-bottom:1px solid #eee;vertical-align:middle}
+.st tr:last-child td{border-bottom:none}
+.si{display:inline-block;background:#f9f8fc;border:1px solid #ddd;border-radius:4px;padding:.4rem .6rem;font-size:.88rem;font-family:var(--font-body);color:var(--ink);text-align:right;width:100%;max-width:120px}
+.si-w{max-width:180px;text-align:left}
+.si-c{text-align:center;max-width:50px}
+.btn-rm{display:inline-block;background:rgba(192,57,43,.1);color:var(--tool-pink);border:none;border-radius:4px;padding:.3rem .75rem;font-size:.78rem;font-weight:600}
+.btn-add{display:inline-block;background:var(--tool-navy);color:#fff;border:none;border-radius:20px;padding:.5rem 1.25rem;font-size:.85rem;font-weight:600}
+.btn-add-sm{background:var(--accent);color:#fff;border:none;border-radius:4px;padding:.25rem .6rem;font-size:.72rem;font-weight:600}
+.btn-outline{display:inline-block;background:var(--bg-card);color:var(--tool-navy);border:1px solid var(--border);border-radius:20px;padding:.5rem 1.25rem;font-size:.85rem;font-weight:600}
+.tr-total td{background:var(--tool-bg);font-weight:600;border-bottom:none!important}
+.c-green{color:var(--tool-green)}.c-red{color:var(--tool-pink)}.c-purple{color:var(--tool-purple)}
+
+/* CLO allocation pills */
+.clo-pill{display:inline-flex;align-items:center;gap:.3rem;background:var(--tool-bg);border:1px solid #ddd;border-radius:4px;padding:.25rem .5rem;font-size:.78rem;margin-right:.25rem}
+.clo-pill-num{font-weight:600;color:var(--tool-navy)}
+.clo-pill-pct{color:var(--ink-muted)}
+.clo-pill-x{color:var(--tool-pink);font-weight:700;cursor:default;margin-left:.15rem}
+
+.ot{width:100%;border-collapse:collapse;font-size:.88rem}
+.ot th{text-align:right;font-weight:600;color:var(--ink-muted);padding:.55rem .7rem;border-bottom:2px solid var(--border);font-size:.8rem}
+.ot th:first-child{text-align:left}
+.ot td{padding:.55rem .7rem;border-bottom:1px solid #eee;text-align:right;vertical-align:middle}
+.ot td:first-child{text-align:left;font-weight:600}
+.ot tr:last-child td{border-bottom:none}
+.ot .tot td{background:var(--tool-bg);font-weight:700;border-bottom:none}
+.ot .hl{background:rgba(108,92,231,.15);font-weight:600;border-radius:3px}
+.ot .grand{background:var(--tool-bg);border-left:4px solid var(--tool-purple);padding:1rem;margin-top:1rem;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:.9rem}
+.ot .grand strong{color:var(--tool-purple)}
+
+/* Assignment block in mock */
+.asmt-block{border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;position:relative;overflow:hidden}
+.asmt-block::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--tool-purple)}
+.asmt-tag{display:inline-block;font-size:.68rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tool-purple);background:var(--tool-bg);padding:3px 10px;border-radius:4px;margin-bottom:.75rem}
+.asmt-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
+.asmt-field label{display:block;font-size:.78rem;font-weight:600;color:var(--ink-muted);margin-bottom:.25rem}
+
+.g{border-left:4px solid var(--gold);border-radius:0 var(--radius) var(--radius) 0;padding:1.25rem 1.5rem;margin:1.25rem 0}
+.g-gold{background:var(--gold-light);border-left-color:var(--gold)}
+.g-green{background:#eafaf1;border-left-color:var(--tool-green)}
+.g-blue{background:var(--accent-light);border-left-color:var(--accent)}
+.g-purple{background:var(--tool-bg);border-left-color:var(--tool-purple)}
+.g-lbl{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.3rem}
+.g-gold .g-lbl{color:var(--gold)}.g-green .g-lbl{color:var(--tool-green)}.g-blue .g-lbl{color:var(--accent)}.g-purple .g-lbl{color:var(--tool-purple)}
+.g p{font-size:.93rem;color:var(--ink-light)}.g p+p{margin-top:.5rem}.g strong{color:var(--ink)}
+
+.apps{display:grid;gap:1rem;margin:1.25rem 0}
+.apps-2{grid-template-columns:1fr 1fr}
+.apps-1{grid-template-columns:1fr}
+@media(max-width:640px){.apps-2{grid-template-columns:1fr}}
+.ac{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;position:relative;overflow:hidden}
+.ac::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+.ac-green::before{background:var(--green)}
+.ac-purple::before{background:var(--tool-purple)}
+.ac-gold::before{background:var(--gold)}
+.ac h4{font-family:var(--font-display);font-weight:600;font-size:1rem;margin-bottom:.4rem}
+.ac p{font-size:.88rem;color:var(--ink-light);line-height:1.6}
+.ac-ex{margin-top:.75rem;background:var(--bg-warm);border-radius:var(--radius-sm);padding:.75rem;font-family:var(--font-mono);font-size:.78rem;color:var(--ink-light);line-height:1.6}
+
+.sf{display:flex;justify-content:space-between;align-items:center;margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.sb{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-body);font-size:.95rem;font-weight:600;padding:12px 24px;border-radius:8px;border:none;cursor:pointer;text-decoration:none;transition:all .25s}
+.sb-next{background:var(--accent);color:#fff}.sb-next:hover{background:var(--accent-hover);transform:translateY(-1px)}
+.sb-prev{background:var(--bg-warm);color:var(--ink-light);border:1px solid var(--border)}.sb-prev:hover{background:#e6e3db}
+.sb-go{background:var(--accent);color:#fff;font-size:1.05rem;padding:14px 32px}.sb-go:hover{background:var(--accent-hover);transform:translateY(-1px)}
+
+.ft{border-top:1px solid var(--border);padding:1.25rem 0;text-align:center;font-size:.82rem;color:var(--ink-muted)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<header class="hd"><div class="pw">
+  <div class="hd-logo">Alignment <span>Construction</span> Tool</div>
+  <a href="[your-landing-page-url]" class="hd-back">← Back to landing page</a>
+</div></header>
+
+<section class="hero"><div class="pw">
+  <span class="hero-tag">Interactive Walkthrough</span>
+  <h1>Stream B: Assignments → Learning Outcomes</h1>
+  <p>A step-by-step guide to inputting your data into the Assignment to CLO Weightings Calculator. Follow along before (or while) using the actual&nbsp;tool.</p>
+</div></section>
+
+<nav class="snav" aria-label="Walkthrough steps"><div class="pw">
+  <div class="snav-inner" id="nav"></div>
+</div></nav>
+
+<main class="steps"><div class="pw">
+
+<!-- ===== STEP 0: Overview ===== -->
+<div class="panel on" id="s0">
+  <div class="sh">
+    <div class="sh-num">Step 1 of 6</div>
+    <h2>Before You Begin</h2>
+    <p>Stream B is for educators who have strong clarity about their assignment tasks and rubric criteria. You start from what you know (your assignments) and the tool calculates the CLO weightings that result from your&nbsp;design.</p>
+  </div>
+
+  <div class="g g-gold">
+    <div class="g-lbl">Key word</div>
+    <p><strong>Estimate.</strong> As with Stream A, the tool works with estimates. You will input your assignment structure and rubric criteria, and the tool will calculate the implied CLO weightings. These outputs are estimates based on your inputs, not precise&nbsp;targets.</p>
+  </div>
+
+  <p style="margin-bottom:1rem;">Stream B asks you to provide one set of inputs (repeated for each assessment):</p>
+  <div class="apps apps-1">
+    <div class="ac"><h4>Table 1: Assignments and Rubric Criteria</h4><p>For each assessment, provide the assignment name, its weighting as a percentage of the course grade, and the rubric criteria. Each criterion is mapped to one or more CLOs with a percentage allocation, plus a total marks&nbsp;value.</p></div>
+  </div>
+
+  <p style="color:var(--ink-light);margin-top:1rem">Based on these inputs, the tool calculates:</p>
+  <div class="apps apps-1" style="margin-top:.75rem">
+    <div class="ac ac-purple"><h4>Table 2: CLO Contribution Results</h4><p>The estimated overall weighting of each CLO across the course, showing how much each CLO contributes to each assignment and to the total course&nbsp;grade.</p></div>
+  </div>
+  <p style="color:var(--ink-light);margin-top:1rem">You then evaluate whether the calculated CLO weightings match your intended emphasis. If they do not, the tool has identified a need to iterate and reconsider your&nbsp;inputs.</p>
+
+  <div class="sf"><div></div><button class="sb sb-next" onclick="go(1)">Next: Assessment Inputs →</button></div>
+</div>
+
+<!-- ===== STEP 1: Assessment Inputs ===== -->
+<div class="panel" id="s1">
+  <div class="sh">
+    <div class="sh-num">Step 2 of 6</div>
+    <h2>Table 1: Assignments and Rubric Criteria</h2>
+    <p>For each assignment in your course, you provide three things: the <strong>assignment name</strong>, its <strong>weighting</strong> as a percentage of the total course grade, and the <strong>rubric criteria</strong> with their CLO mappings plus a total marks value for each&nbsp;criterion.</p>
+  </div>
+
+  <div class="g g-blue">
+    <div class="g-lbl">Structure</div>
+    <p>You will repeat this process for each assignment in your course. The tool provides an "Add Assignment" button to create additional assignment blocks. Each assignment block contains its own set of rubric&nbsp;criteria.</p>
+  </div>
+
+  <!-- Simulated Assessment 1 -->
+  <div class="tm">
+    <div class="tm-bar"><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-title">Stream B Calculator</span></div>
+    <div class="tm-body">
+      <div class="ts-hdr">
+        <div><div class="ts-label"><span class="n">1.</span> Assignments and Rubric Criteria</div><div class="ts-ul"></div></div>
+        <span class="btn-add">Add Assignment</span>
+      </div>
+
+      <div class="asmt-block">
+        <span class="asmt-tag">Assignment 1</span>
+        <div class="asmt-header">
+          <div class="asmt-field"><label>Assignment Name</label><span class="si si-w">Assignment 1</span></div>
+          <div class="asmt-field"><label>Weighting (%)</label><span class="si">20</span></div>
+        </div>
+
+        <p style="font-family:var(--font-display);font-weight:600;font-size:1rem;margin-bottom:.75rem">Rubric Criteria</p>
+        <div style="overflow-x:auto">
+        <table class="st" aria-label="Assignment 1 rubric criteria">
+          <thead><tr><th>Criteria Name</th><th>CLO Allocations</th><th style="text-align:right;width:100px">Total Marks</th><th style="text-align:center;width:70px">Actions</th></tr></thead>
+          <tbody>
+            <tr><td><span class="si si-w">Criteria 1</span></td><td><span class="clo-pill"><span class="clo-pill-num">CLO: 1</span><span class="clo-pill-pct">%: 100</span><span class="clo-pill-x">×</span></span> <span class="btn-add-sm">+ Add CLO</span> <span style="font-size:.78rem;color:var(--ink-muted)">Total: 100%</span></td><td style="text-align:right"><span class="si">20</span></td><td style="text-align:center"><span class="btn-rm">Remove</span></td></tr>
+            <tr><td><span class="si si-w">Criteria 2</span></td><td><span class="clo-pill"><span class="clo-pill-num">CLO: 1</span><span class="clo-pill-pct">%: 100</span><span class="clo-pill-x">×</span></span> <span class="btn-add-sm">+ Add CLO</span> <span style="font-size:.78rem;color:var(--ink-muted)">Total: 100%</span></td><td style="text-align:right"><span class="si">30</span></td><td style="text-align:center"><span class="btn-rm">Remove</span></td></tr>
+            <tr><td><span class="si si-w">Criteria 3</span></td><td><span class="clo-pill"><span class="clo-pill-num">CLO: 3</span><span class="clo-pill-pct">%: 100</span><span class="clo-pill-x">×</span></span> <span class="btn-add-sm">+ Add CLO</span> <span style="font-size:.78rem;color:var(--ink-muted)">Total: 100%</span></td><td style="text-align:right"><span class="si">20</span></td><td style="text-align:center"><span class="btn-rm">Remove</span></td></tr>
+            <tr><td><span class="si si-w">Criteria 4</span></td><td><span class="clo-pill"><span class="clo-pill-num">CLO: 4</span><span class="clo-pill-pct">%: 100</span><span class="clo-pill-x">×</span></span> <span class="btn-add-sm">+ Add CLO</span> <span style="font-size:.78rem;color:var(--ink-muted)">Total: 100%</span></td><td style="text-align:right"><span class="si">20</span></td><td style="text-align:center"><span class="btn-rm">Remove</span></td></tr>
+            <tr><td><span class="si si-w">Criteria 5</span></td><td><span class="clo-pill"><span class="clo-pill-num">CLO: 4</span><span class="clo-pill-pct">%: 100</span><span class="clo-pill-x">×</span></span> <span class="btn-add-sm">+ Add CLO</span> <span style="font-size:.78rem;color:var(--ink-muted)">Total: 100%</span></td><td style="text-align:right"><span class="si">10</span></td><td style="text-align:center"><span class="btn-rm">Remove</span></td></tr>
+            <tr class="tr-total"><td></td><td></td><td style="text-align:right">Total Marks: <strong>100.00</strong></td><td></td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g g-gold">
+    <div class="g-lbl">What to notice</div>
+    <p>In this example, Assignment 1 is worth <strong>20%</strong> of the course grade and has 5 criteria totalling 100 marks. Each criterion is mapped to a CLO. Notice that CLO 1 appears in two criteria (Criteria 1 and 2) and CLO 4 also appears in two criteria (Criteria 4 and 5). This is perfectly normal. A CLO's influence on an assignment is the combined effect of all the criteria mapped to&nbsp;it.</p>
+    <p>For example, CLO 1's influence on Assignment 1 comes from Criteria 1 (20 marks) and Criteria 2 (30 marks), giving it 50 out of 100 marks, or 50% of the assignment.s rubric.</p>
+  </div>
+
+  <div class="sf">
+    <button class="sb sb-prev" onclick="go(0)">← Overview</button>
+    <button class="sb sb-next" onclick="go(2)">Next: CLO Allocations →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 2: CLO Allocations ===== -->
+<div class="panel" id="s2">
+  <div class="sh">
+    <div class="sh-num">Step 3 of 6</div>
+    <h2>CLO Allocations Within Criteria</h2>
+    <p>Each criterion must be mapped to at least one CLO. Some criteria may assess more than one CLO. When this happens, you indicate the <strong>relative influence</strong> of each CLO on that&nbsp;criterion.</p>
+  </div>
+
+  <!-- Simulated multi-CLO criterion -->
+  <div class="tm">
+    <div class="tm-bar"><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-title">Stream B Calculator : Assignment 2</span></div>
+    <div class="tm-body">
+      <div class="asmt-block">
+        <span class="asmt-tag">Assignment 2</span>
+        <div class="asmt-header">
+          <div class="asmt-field"><label>Assignment Name</label><span class="si si-w">Assignment 2</span></div>
+          <div class="asmt-field"><label>Weighting (%)</label><span class="si">40</span></div>
+        </div>
+
+        <p style="font-family:var(--font-display);font-weight:600;font-size:1rem;margin-bottom:.75rem">Rubric Criteria</p>
+        <div style="overflow-x:auto">
+        <table class="st" aria-label="Assignment 2 rubric criteria">
+          <thead><tr><th>Criteria Name</th><th>CLO Allocations</th><th style="text-align:right;width:100px">Total Marks</th><th style="text-align:center;width:70px">Actions</th></tr></thead>
+          <tbody>
+            <tr><td><span class="si si-w">Criteria 1</span></td><td><span class="clo-pill"><span class="clo-pill-num">CLO: 1</span><span class="clo-pill-pct">%: 100</span><span class="clo-pill-x">×</span></span> <span class="btn-add-sm">+ Add CLO</span> <span style="font-size:.78rem;color:var(--ink-muted)">Total: 100%</span></td><td style="text-align:right"><span class="si">40</span></td><td style="text-align:center"><span class="btn-rm">Remove</span></td></tr>
+            <tr style="background:#faf9ff"><td><span class="si si-w">Criteria 2</span></td><td><span class="clo-pill"><span class="clo-pill-num">CLO: 1</span><span class="clo-pill-pct">%: 50</span><span class="clo-pill-x">×</span></span> <span class="clo-pill"><span class="clo-pill-num">CLO: 2</span><span class="clo-pill-pct">%: 50</span><span class="clo-pill-x">×</span></span><br><span class="btn-add-sm">+ Add CLO</span> <span style="font-size:.78rem;color:var(--ink-muted)">Total: 100%</span></td><td style="text-align:right"><span class="si">30</span></td><td style="text-align:center"><span class="btn-rm">Remove</span></td></tr>
+            <tr><td><span class="si si-w">Criteria 3</span></td><td><span class="clo-pill"><span class="clo-pill-num">CLO: 3</span><span class="clo-pill-pct">%: 100</span><span class="clo-pill-x">×</span></span> <span class="btn-add-sm">+ Add CLO</span> <span style="font-size:.78rem;color:var(--ink-muted)">Total: 100%</span></td><td style="text-align:right"><span class="si">15</span></td><td style="text-align:center"><span class="btn-rm">Remove</span></td></tr>
+            <tr><td><span class="si si-w">Criteria 4</span></td><td><span class="clo-pill"><span class="clo-pill-num">CLO: 4</span><span class="clo-pill-pct">%: 100</span><span class="clo-pill-x">×</span></span> <span class="btn-add-sm">+ Add CLO</span> <span style="font-size:.78rem;color:var(--ink-muted)">Total: 100%</span></td><td style="text-align:right"><span class="si">15</span></td><td style="text-align:center"><span class="btn-rm">Remove</span></td></tr>
+            <tr class="tr-total"><td></td><td></td><td style="text-align:right">Total Marks: <strong>100.00</strong></td><td></td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g g-gold">
+    <div class="g-lbl">Criteria mapped to multiple CLOs</div>
+    <p>Look at <strong>Criteria 2</strong> in Assignment 2 above. It is mapped to both CLO 1 (50%) and CLO 2 (50%). This means the 30 marks for that criterion are split equally between the two CLOs. The allocations for a single criterion must always total&nbsp;100%.</p>
+    <p>The split does not have to be equal. If CLO 1 had 70% influence and CLO 2 had 30%, you would enter those percentages instead. The key is to indicate the relative influence of each CLO on that particular&nbsp;criterion.</p>
+  </div>
+
+  <div class="g g-green">
+    <div class="g-lbl">Single-CLO criteria</div>
+    <p>When a criterion is mapped to only one CLO, the allocation is simply 100%. Most criteria will likely be mapped to a single CLO. The multi-CLO scenario is available for criteria that genuinely assess more than one&nbsp;outcome.</p>
+  </div>
+
+  <div class="sf">
+    <button class="sb sb-prev" onclick="go(1)">← Assessment Inputs</button>
+    <button class="sb sb-next" onclick="go(3)">Next: Completing All Assessments →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 3: All Assessments ===== -->
+<div class="panel" id="s3">
+  <div class="sh">
+    <div class="sh-num">Step 4 of 6</div>
+    <h2>Completing All Assessments</h2>
+    <p>You repeat the process for every assignment in your course. Each assignment has its own weighting, criteria, and CLO mappings. The assignment weightings must total&nbsp;100%.</p>
+  </div>
+
+  <div class="apps apps-1">
+    <div class="ac">
+      <h4>Example: A three-assessment course</h4>
+      <div class="ac-ex" style="margin-top:.5rem">
+Assignment 1: 20% : 5 criteria (CLOs 1, 1, 3, 4, 4)<br>
+Assignment 2: 40% : 4 criteria (CLOs 1, 1+2, 3, 4)<br>
+Assignment 3: 40% : 4 criteria (CLOs 2, 2, 3, 4)
+      </div>
+      <p style="margin-top:.75rem">Notice how the number of criteria can differ between assignments, and CLOs can appear in different combinations across the course. The tool aggregates all of this to calculate the overall CLO&nbsp;weightings.</p>
+    </div>
+  </div>
+
+  <div class="g g-gold">
+    <div class="g-lbl">Things to check before moving on</div>
+    <p><strong>Assignment weightings total 100%.</strong> The tool shows a "Total Assignment Weightings" bar that confirms&nbsp;this.</p>
+    <p><strong>Total marks within each assignment are consistent.</strong> It does not matter whether you use 100, 50, or any other total, as long as the marks reflect the relative importance of each criterion within that&nbsp;assessment.</p>
+    <p><strong>CLO allocations within each criterion total 100%.</strong> The tool displays a "Total" indicator next to each criterion's CLO&nbsp;allocations.</p>
+  </div>
+
+  <div class="sf">
+    <button class="sb sb-prev" onclick="go(2)">← CLO Allocations</button>
+    <button class="sb sb-next" onclick="go(4)">Next: Evaluate Outputs →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 4: Evaluate Outputs ===== -->
+<div class="panel" id="s4">
+  <div class="sh">
+    <div class="sh-num">Step 5 of 6</div>
+    <h2>Evaluate the Outputs</h2>
+    <p>Once you have entered all your assignments, the tool calculates the CLO Contribution Results. Remember that these outputs are <strong>estimates</strong> based on your inputs. If the numbers are close to what you expected (within about 5%), the alignment is working. If there is a significant discrepancy, adjustments should be made to your&nbsp;inputs.</p>
+  </div>
+
+  <div class="tm">
+    <div class="tm-bar"><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-title">Calculated Output</span></div>
+    <div class="tm-body">
+      <div class="ts-label"><span class="n">2.</span> CLO Contribution Results</div>
+      <div class="ts-ul"></div>
+      <div class="ts-desc">Calculated contribution of each assignment to each CLO, based on rubric criteria.</div>
+      <table class="ot" aria-label="CLO contribution results">
+        <thead><tr><th style="text-align:left;width:100px">CLO</th><th>Assignment 1</th><th>Assignment 2</th><th>Assignment 3</th><th>Overall</th></tr></thead>
+        <tbody>
+          <tr><td>CLO 1</td><td>10.00%</td><td>22.00%</td><td>0.00%</td><td class="hl">32.00%</td></tr>
+          <tr><td>CLO 2</td><td>0.00%</td><td>6.00%</td><td>24.00%</td><td class="hl">30.00%</td></tr>
+          <tr><td>CLO 3</td><td>4.00%</td><td>6.00%</td><td>10.00%</td><td class="hl">20.00%</td></tr>
+          <tr><td>CLO 4</td><td>6.00%</td><td>6.00%</td><td>6.00%</td><td class="hl">18.00%</td></tr>
+          <tr class="tot"><td>Total:</td><td>20.00%</td><td>40.00%</td><td>40.00%</td><td>100.00%</td></tr>
+        </tbody>
+      </table>
+      <div class="ot grand"><strong>Grand Total: 100.00%</strong> &nbsp;(Should equal 100%)</div>
+    </div>
+  </div>
+
+  <div class="g g-purple">
+    <div class="g-lbl">What this tells you</div>
+    <p>The <strong>Overall</strong> column shows the estimated weighting of each CLO across the entire course. In this example: CLO 1 ≈ 30%, CLO 2 ≈ 30%, CLO 3 ≈ 20%, CLO 4 ≈ 20% (rounding to the nearest 5%).</p>
+    <p>Ask yourself: do these CLO weightings match your intended emphasis? You can also evaluate them against the energy each CLO demands in your teaching sequence. If a CLO takes up significant teaching time but has a low weighting, or vice versa, that may indicate a misalignment worth&nbsp;investigating.</p>
+  </div>
+
+  <div class="g g-gold" style="margin-top:1.5rem">
+    <div class="g-lbl">Remember: iterate</div>
+    <p>If the outputs do not match your intuition, the tool has identified a need to iterate and reconsider the inputs you provided. Go back and adjust your rubric criteria, marks allocations, or CLO mappings. The next step explains how to make these&nbsp;adjustments.</p>
+  </div>
+
+  <div class="sf">
+    <button class="sb sb-prev" onclick="go(3)">← All Assessments</button>
+    <button class="sb sb-next" onclick="go(5)">Next: How to Iterate →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 5: How to Iterate ===== -->
+<div class="panel" id="s5">
+  <div class="sh">
+    <div class="sh-num">Step 6 of 6</div>
+    <h2>How to Iterate</h2>
+    <p>When the calculated CLO weightings do not match your intended emphasis, you need to adjust your inputs. The tool updates all outputs instantly as you make changes, so you can see the effect of each adjustment in real&nbsp;time.</p>
+  </div>
+
+  <div class="g g-gold">
+    <div class="g-lbl">The core principle</div>
+    <p>To <strong>increase</strong> a CLO's overall weighting, you need to give it more influence in one or more assignments. To <strong>decrease</strong> a CLO's weighting, you reduce its influence. Because the total must remain at 100%, increasing one CLO's weighting means borrowing from one or more of the&nbsp;others.</p>
+  </div>
+
+  <div class="apps apps-1">
+    <div class="ac ac-purple">
+      <h4>Scenario: Increasing CLO 3 from 20% to 30%</h4>
+      <p>Suppose you review the output and decide that CLO 3 should have 30% influence rather than 20%. That means you need to find 10% from other CLOs. Here is one way to approach&nbsp;it:</p>
+      <div class="ac-ex" style="margin-top:.75rem">
+<strong>Current:</strong> CLO 1: 32%, CLO 2: 30%, CLO 3: 20%, CLO 4: 18%<br>
+<strong>Target:</strong> CLO 1: 30%, CLO 2: 25%, CLO 3: 30%, CLO 4: 15%<br><br>
+<strong>Adjustments:</strong><br>
+1. In Assignment 3, increase CLO 3's criteria marks<br>
+&nbsp;&nbsp;&nbsp;(e.g., Criteria 3 from 25 marks to 40 marks)<br>
+2. Reduce CLO 2's criteria marks in the same assessment<br>
+&nbsp;&nbsp;&nbsp;(e.g., Criteria 1 from 30 to 20 marks)<br>
+3. Observe the updated CLO weightings in real time<br>
+4. Continue adjusting until the balance feels right
+      </div>
+      <p style="margin-top:.75rem">You have several levers: you can adjust the <strong>total marks</strong> for individual criteria, change the <strong>CLO allocation percentages</strong> within multi-CLO criteria, add or remove criteria, or even adjust <strong>assignment weightings</strong> if the overall course structure needs to&nbsp;shift.</p>
+    </div>
+  </div>
+
+  <div class="g g-green">
+    <div class="g-lbl">What to expect</div>
+    <p>As you adjust values, you will see the CLO Contribution Results update in real time. Iteration should continue until the estimates are about right. Remember, you are working with estimates rounded to about 5%, so precision to the decimal point is not the&nbsp;goal.</p>
+    <p>It is normal to go back and forth several times. Each adjustment may shift other outputs, which is part of the process of understanding how the components of your course&nbsp;interact.</p>
+  </div>
+
+  <div class="g g-gold">
+    <div class="g-lbl">Why this matters beyond the tool</div>
+    <p>The adjustments you make here are not just numbers in a calculator. They have <strong>real implications for how your course is run</strong>. If the iteration process leads you to change the balance of CLO weightings, the teaching sequence will need to reflect that. For example, if a CLO's weighting increases, the teaching and learning activities that prepare students for that outcome may need more time, more scaffolding, or a different position in the&nbsp;sequence.</p>
+    <p>The tool helps you see these relationships before you commit to changes, so that your course design decisions are informed by the alignment between what you intend students to learn, how you assess that learning, and how you structure the teaching to support&nbsp;it.</p>
+  </div>
+
+  <!-- Video placeholder -->
+  <div style="margin:1.5rem 0;border:2px dashed var(--border);border-radius:var(--radius);background:var(--bg-warm);padding:3rem 1.5rem;text-align:center;color:var(--ink-muted)">
+    <div style="font-size:2.4rem;margin-bottom:.75rem;opacity:.5" aria-hidden="true">▶</div>
+    <p style="font-size:.95rem;max-width:420px;margin:0 auto"><strong style="color:var(--ink-light)">Video walkthrough: Iterating in Stream B</strong></p>
+    <p style="font-size:.9rem;max-width:420px;margin:.5rem auto;line-height:1.6">Watch how adjustments to rubric criteria and CLO allocations affect the outputs in real time, and how to iterate until the CLO weightings match your&nbsp;intuition.</p>
+    <p style="margin-top:.8rem;font-size:.82rem;font-style:italic"><!-- Replace this div with your embedded video: <iframe src="your-video-url" ...></iframe> -->[Video embed placeholder]</p>
+  </div>
+
+  <div class="sf" style="flex-direction:column;gap:1rem;align-items:center;text-align:center">
+    <a href="https://mediaproduction.adelaide.edu.au/pace-interactives/#/clos" class="sb sb-go" target="_blank" rel="noopener">Open the Stream B Tool →</a>
+    <button class="sb sb-prev" onclick="go(4)" style="align-self:flex-start">← Evaluate Outputs</button>
+  </div>
+</div>
+
+</div></main>
+
+<footer class="ft"><div class="pw">
+  <p>The Alignment Construction Tool &middot; An educational research project</p>
+</div></footer>
+
+<script>
+const STEPS = ['Overview','Inputs','CLO Allocations','All Assessments','Evaluate','Iterate'];
+const nav = document.getElementById('nav');
+STEPS.forEach((label, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'sp' + (i === 0 ? ' on' : '');
+  btn.onclick = () => go(i);
+  btn.innerHTML = `<span class="sp-n">${i+1}</span><span class="sp-l">${label}</span>`;
+  btn.setAttribute('aria-label', `Step ${i+1}: ${label}`);
+  nav.appendChild(btn);
+});
+
+function go(n) {
+  document.querySelectorAll('.panel').forEach((p, i) => {
+    p.classList.toggle('on', i === n);
+  });
+  document.querySelectorAll('.sp').forEach((p, i) => {
+    p.classList.toggle('on', i === n);
+  });
+  window.scrollTo({ top: document.querySelector('.steps').offsetTop - 120, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

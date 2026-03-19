@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stream A Walkthrough: Alignment Construction Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#1a2a3a;--ink-light:#3d5269;--ink-muted:#6b7f94;
+  --bg:#f8f7f4;--bg-warm:#f1efe9;--bg-card:#fff;
+  --accent:#1b6b5a;--accent-light:#e6f2ef;--accent-hover:#155a4b;
+  --blue:#2a5a8f;--blue-light:#e4edf7;
+  --gold:#d4a853;--gold-light:#fef8eb;
+  --border:#ddd8ce;
+  --tool-navy:#1e1e3f;--tool-pink:#c0392b;--tool-green:#27ae60;--tool-purple:#6c5ce7;--tool-bg:#f5f3ff;
+  --font-display:'Fraunces',Georgia,serif;
+  --font-body:'Source Sans 3','Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --radius:10px;--radius-sm:6px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);color:var(--ink);background:var(--bg);line-height:1.72;font-size:17px;-webkit-font-smoothing:antialiased}
+.pw{max-width:900px;margin:0 auto;padding:0 1.5rem}
+
+/* Header */
+.hd{padding:.85rem 0;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100}
+.hd .pw{display:flex;align-items:center;justify-content:space-between}
+.hd-logo{font-family:var(--font-display);font-weight:600;font-size:.95rem;color:var(--ink)}
+.hd-logo span{color:var(--accent)}
+.hd-back{font-size:.85rem;color:var(--accent);text-decoration:none;font-weight:500}
+.hd-back:hover{text-decoration:underline}
+
+/* Hero */
+.hero{padding:2.5rem 0 1.5rem;text-align:center}
+.hero-tag{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);background:var(--accent-light);padding:4px 14px;border-radius:20px;margin-bottom:1rem}
+.hero h1{font-family:var(--font-display);font-weight:700;font-size:clamp(1.5rem,3.5vw,2.1rem);line-height:1.2;letter-spacing:-.02em;margin-bottom:.75rem}
+.hero p{color:var(--ink-light);max-width:600px;margin:0 auto;font-size:1.02rem}
+
+/* Step nav */
+.snav{position:sticky;top:52px;z-index:99;background:var(--bg);padding:.85rem 0 .75rem;border-bottom:1px solid var(--border)}
+.snav-inner{display:flex;align-items:center;gap:.25rem;justify-content:center;flex-wrap:wrap}
+.sp{display:flex;align-items:center;gap:.25rem;cursor:pointer;padding:6px 12px;border-radius:20px;font-size:.82rem;font-weight:500;color:var(--ink-muted);background:0 0;border:1px solid transparent;transition:all .25s}
+.sp:hover{color:var(--ink-light);background:var(--bg-warm)}
+.sp.on{color:var(--accent);background:var(--accent-light);border-color:rgba(27,107,90,.2);font-weight:600}
+.sp-n{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:.72rem;font-weight:700;background:var(--border);color:var(--ink-muted);transition:all .25s}
+.sp.on .sp-n{background:var(--accent);color:#fff}
+.sp-l{display:none}
+@media(min-width:700px){.sp-l{display:inline}}
+
+/* Panels */
+.steps{padding:2rem 0 4rem}
+.panel{display:none;animation:fadeIn .4s ease}
+.panel.on{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* Step header */
+.sh{margin-bottom:1.5rem}
+.sh-num{font-size:.72rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+.sh h2{font-family:var(--font-display);font-weight:600;font-size:1.5rem;line-height:1.25;letter-spacing:-.015em}
+.sh p{color:var(--ink-light);margin-top:.5rem;max-width:680px}
+
+/* Tool mock */
+.tm{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin:1.5rem 0;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.tm-bar{background:var(--tool-bg);border-bottom:1px solid var(--border);padding:.6rem 1.25rem;display:flex;align-items:center;gap:.5rem}
+.tm-dot{width:10px;height:10px;border-radius:50%}
+.tm-dot:nth-child(1){background:#e74c3c}.tm-dot:nth-child(2){background:#f39c12}.tm-dot:nth-child(3){background:#2ecc71}
+.tm-title{font-size:.78rem;color:var(--ink-muted);margin-left:.5rem;font-family:var(--font-mono)}
+.tm-body{padding:1.5rem}
+.tm-body-sm{padding:1rem 1.25rem}
+
+.ts-label{font-family:var(--font-display);font-weight:600;font-size:1.15rem;color:var(--tool-navy);margin-bottom:.3rem}
+.ts-label .n{color:var(--tool-purple)}
+.ts-ul{width:36px;height:3px;background:var(--tool-purple);border-radius:2px;margin-bottom:1rem}
+.ts-desc{font-size:.9rem;color:var(--ink-muted);margin-bottom:1rem}
+.ts-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem}
+
+/* Simulated table */
+.st{width:100%;border-collapse:collapse;font-size:.9rem}
+.st th{text-align:left;font-weight:600;color:var(--ink-muted);padding:.6rem .75rem;border-bottom:2px solid var(--border);font-size:.82rem}
+.st td{padding:.6rem .75rem;border-bottom:1px solid #eee;vertical-align:middle}
+.st tr:last-child td{border-bottom:none}
+.si{display:inline-block;background:#f9f8fc;border:1px solid #ddd;border-radius:4px;padding:.4rem .6rem;font-size:.88rem;font-family:var(--font-body);color:var(--ink);text-align:right;width:100%;max-width:120px}
+.si-w{max-width:180px;text-align:left}
+.btn-rm{display:inline-block;background:rgba(192,57,43,.1);color:var(--tool-pink);border:none;border-radius:4px;padding:.3rem .75rem;font-size:.78rem;font-weight:600}
+.btn-add{display:inline-block;background:var(--tool-navy);color:#fff;border:none;border-radius:20px;padding:.5rem 1.25rem;font-size:.85rem;font-weight:600}
+.tr-total td{background:var(--tool-bg);font-weight:600;border-bottom:none!important}
+.c-green{color:var(--tool-green)}.c-red{color:var(--tool-pink)}.c-purple{color:var(--tool-purple)}
+
+/* Output table */
+.ot{width:100%;border-collapse:collapse;font-size:.88rem}
+.ot th{text-align:right;font-weight:600;color:var(--ink-muted);padding:.55rem .7rem;border-bottom:2px solid var(--border);font-size:.8rem}
+.ot th:first-child{text-align:left}
+.ot td{padding:.55rem .7rem;border-bottom:1px solid #eee;text-align:right;vertical-align:middle}
+.ot td:first-child{text-align:left;font-weight:600}
+.ot tr:last-child td{border-bottom:none}
+.ot .tot td{background:var(--tool-bg);font-weight:700;border-bottom:none}
+.ot .hl{background:rgba(108,92,231,.15);font-weight:600;border-radius:3px}
+.ot .grand{background:var(--tool-bg);border-left:4px solid var(--tool-purple);padding:1rem;margin-top:1rem;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:.9rem}
+.ot .grand strong{color:var(--tool-purple)}
+
+/* Guidance callouts */
+.g{border-left:4px solid var(--gold);border-radius:0 var(--radius) var(--radius) 0;padding:1.25rem 1.5rem;margin:1.25rem 0}
+.g-gold{background:var(--gold-light);border-left-color:var(--gold)}
+.g-green{background:#eafaf1;border-left-color:var(--tool-green)}
+.g-blue{background:var(--blue-light);border-left-color:var(--blue)}
+.g-purple{background:var(--tool-bg);border-left-color:var(--tool-purple)}
+.g-lbl{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.3rem}
+.g-gold .g-lbl{color:var(--gold)}.g-green .g-lbl{color:var(--tool-green)}.g-blue .g-lbl{color:var(--blue)}.g-purple .g-lbl{color:var(--tool-purple)}
+.g p{font-size:.93rem;color:var(--ink-light)}.g p+p{margin-top:.5rem}.g strong{color:var(--ink)}
+
+/* Approach cards */
+.apps{display:grid;gap:1rem;margin:1.25rem 0}
+.apps-2{grid-template-columns:1fr 1fr}
+.apps-1{grid-template-columns:1fr}
+@media(max-width:640px){.apps-2{grid-template-columns:1fr}}
+.ac{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;position:relative;overflow:hidden}
+.ac::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+.ac-blue::before{background:var(--blue)}.ac-purple::before{background:var(--tool-purple)}.ac-gold::before{background:var(--gold)}
+.ac h4{font-family:var(--font-display);font-weight:600;font-size:1rem;margin-bottom:.4rem}
+.ac p{font-size:.88rem;color:var(--ink-light);line-height:1.6}
+.ac-ex{margin-top:.75rem;background:var(--bg-warm);border-radius:var(--radius-sm);padding:.75rem;font-family:var(--font-mono);font-size:.78rem;color:var(--ink-light);line-height:1.6}
+
+/* Ratio diagrams */
+.rd{display:flex;align-items:stretch;gap:2px;height:32px;border-radius:6px;overflow:hidden;margin:.75rem 0;max-width:320px}
+.rd div{display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:600;color:#fff}
+.rd-a{background:var(--accent)}.rd-b{background:var(--blue)}.rd-c{background:var(--tool-purple)}
+
+/* Footer nav */
+.sf{display:flex;justify-content:space-between;align-items:center;margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.sb{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-body);font-size:.95rem;font-weight:600;padding:12px 24px;border-radius:8px;border:none;cursor:pointer;text-decoration:none;transition:all .25s}
+.sb-next{background:var(--accent);color:#fff}.sb-next:hover{background:var(--accent-hover);transform:translateY(-1px)}
+.sb-prev{background:var(--bg-warm);color:var(--ink-light);border:1px solid var(--border)}.sb-prev:hover{background:#e6e3db}
+.sb-go{background:var(--accent);color:#fff;font-size:1.05rem;padding:14px 32px}.sb-go:hover{background:var(--accent-hover);transform:translateY(-1px)}
+
+/* Footer */
+.ft{border-top:1px solid var(--border);padding:1.25rem 0;text-align:center;font-size:.82rem;color:var(--ink-muted)}
+
+a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<header class="hd"><div class="pw">
+  <div class="hd-logo">Alignment <span>Construction</span> Tool</div>
+  <a href="[your-landing-page-url]" class="hd-back">← Back to landing page</a>
+</div></header>
+
+<section class="hero"><div class="pw">
+  <span class="hero-tag">Interactive Walkthrough</span>
+  <h1>Stream A: Learning Outcomes → Assessments</h1>
+  <p>A step-by-step guide to inputting your data into the CLO to Assessment Weightings Calculator. Follow along before (or while) using the actual&nbsp;tool.</p>
+</div></section>
+
+<nav class="snav" aria-label="Walkthrough steps"><div class="pw">
+  <div class="snav-inner" id="nav"></div>
+</div></nav>
+
+<main class="steps"><div class="pw">
+
+<!-- ===== STEP 0: Overview ===== -->
+<div class="panel on" id="s0">
+  <div class="sh">
+    <div class="sh-num">Step 1 of 6</div>
+    <h2>Before You Begin</h2>
+    <p>The purpose of this tool is to provide a scaffold for you to consider how components in your course interact and integrate with each other.</p>
+  </div>
+
+  <div class="g g-gold">
+    <div class="g-lbl">Key word</div>
+    <p><strong>Estimate.</strong> The tool prompts you to input estimates for CLO weightings and how they map across assignments. These are not meant to be precise from the start. The tool is designed for iteration: expect to adjust your inputs multiple times as you refine your understanding.</p>
+  </div>
+
+  <p style="margin-bottom:1rem;">Stream A asks you to provide two sets of inputs:</p>
+  <div class="apps apps-2">
+    <div class="ac"><h4>Table 1: CLO Weightings</h4><p>Estimate the relative importance of each CLO in your course, expressed as percentages totalling&nbsp;100%.</p></div>
+    <div class="ac"><h4>Table 2: CLO Mapping</h4><p>Map how each CLO distributes across your assessment tasks using&nbsp;ratios.</p></div>
+  </div>
+
+  <p style="color:var(--ink-light)">Based on these inputs, the tool calculates:</p>
+  <div class="apps apps-2" style="margin-top:.75rem">
+    <div class="ac ac-purple" style=""><h4>Table 3: Assessment Weightings</h4><p>The estimated weighting of each assessment as a percentage of the overall course&nbsp;grade.</p></div>
+    <div class="ac ac-purple" style=""><h4>Table 4: Rubric Composition</h4><p>The percentage emphasis each CLO should have within each individual assessment's marking&nbsp;criteria.</p></div>
+  </div>
+  <p style="color:var(--ink-light);margin-top:1rem">You then evaluate whether these outputs match your intuition about the&nbsp;course.</p>
+
+  <div class="sf"><div></div><button class="sb sb-next" onclick="go(1)">Next: CLO Weightings →</button></div>
+</div>
+
+<!-- ===== STEP 1: CLO Weightings ===== -->
+<div class="panel" id="s1">
+  <div class="sh">
+    <div class="sh-num">Step 2 of 6</div>
+    <h2>Table 1: CLO Course Weightings</h2>
+    <p>This is about the <strong>relative importance</strong> of each CLO in your course. You estimate each CLO's contribution as a percentage out of 100.</p>
+  </div>
+
+  <div class="tm">
+    <div class="tm-bar"><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-title">Stream A Calculator</span></div>
+    <div class="tm-body">
+      <div class="ts-hdr">
+        <div><div class="ts-label"><span class="n">1.</span> CLO Course Weightings</div><div class="ts-ul"></div></div>
+        <span class="btn-add">Add CLO</span>
+      </div>
+      <table class="st" aria-label="CLO weightings example">
+        <thead><tr><th style="width:70px">CLO</th><th>Name</th><th style="width:160px;text-align:right">Course Weighting (%)</th><th style="width:80px;text-align:center">Actions</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600">CLO 1</td><td><span class="si si-w">CLO 1</span></td><td style="text-align:right"><span class="si">30</span></td><td style="text-align:center"><span class="btn-rm">Remove</span></td></tr>
+          <tr><td style="font-weight:600">CLO 2</td><td><span class="si si-w">CLO 2</span></td><td style="text-align:right"><span class="si">30</span></td><td style="text-align:center"><span class="btn-rm">Remove</span></td></tr>
+          <tr><td style="font-weight:600">CLO 3</td><td><span class="si si-w">CLO 3</span></td><td style="text-align:right"><span class="si">20</span></td><td style="text-align:center"><span class="btn-rm">Remove</span></td></tr>
+          <tr><td style="font-weight:600">CLO 4</td><td><span class="si si-w">CLO 4</span></td><td style="text-align:right"><span class="si">20</span></td><td style="text-align:center"><span class="btn-rm">Remove</span></td></tr>
+          <tr class="tr-total"><td></td><td style="text-align:right;font-weight:700">Total:</td><td style="text-align:right"><span class="c-green">100.0%</span></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="g g-gold">
+    <div class="g-lbl">How to think about this</div>
+    <p>The amount of time spent teaching a CLO is <strong>not necessarily</strong> the true reflection of its relative importance. What matters most is how it is mapped to&nbsp;assignments.</p>
+    <p>Think about all of the marking criteria across every assignment. Each criterion contributes a certain percentage to the overall course grade. Each time you map a CLO to a criterion, the relative importance of that CLO increases. The more it is mapped, the more important it must be.</p>
+    <p>More accurately: estimate importance by considering how much influence each criterion has on an assignment, and then how much influence that assignment has on the total course&nbsp;grade.</p>
+  </div>
+
+  <div class="g g-green">
+    <div class="g-lbl">Common scenarios</div>
+    <p><strong>A CLO that supports progression:</strong> Sometimes CLOs are designed so they represent progression through to more complex skills. In this case, CLO 1 may be considered as important as the others, but if assessments test the other CLOs more, that is where the actual influence must be recognised. If CLO 1 only contributes 10% to the assessments, estimate it at 10%, freeing 90% for the remaining&nbsp;CLOs.</p>
+    <p><strong>Multiple CLOs in one criterion:</strong> Within that criterion, consider how important each CLO is relative to the others mapped to it, then aggregate as&nbsp;above.</p>
+    <p><strong>All CLOs equally important:</strong> This means they will be assessed equally. Indicate equal weightings (e.g., 25% each for four&nbsp;CLOs).</p>
+  </div>
+
+  <div class="sf">
+    <button class="sb sb-prev" onclick="go(0)">← Overview</button>
+    <button class="sb sb-next" onclick="go(2)">Next: CLO Mapping →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 2: CLO Mapping ===== -->
+<div class="panel" id="s2">
+  <div class="sh">
+    <div class="sh-num">Step 3 of 6</div>
+    <h2>Table 2: CLO Mapping Across Assessments</h2>
+    <p>Here you map how each CLO distributes across your assessment tasks. The most important consideration is that the values represent a <strong>ratio of relative importance</strong> across the assessments each CLO is mapped&nbsp;to.</p>
+  </div>
+
+  <div class="tm">
+    <div class="tm-bar"><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-title">Stream A Calculator</span></div>
+    <div class="tm-body">
+      <div class="ts-hdr">
+        <div><div class="ts-label"><span class="n">2.</span> Assessment Raw Values (Pre-Scaled)</div><div class="ts-ul"></div>
+        <div class="ts-desc">Enter raw values for each CLO within each assessment (e.g., hours, points, or any proportional measure).</div></div>
+        <span class="btn-add">Add Assessment</span>
+      </div>
+      <div style="overflow-x:auto">
+      <table class="st" aria-label="Assessment raw values example">
+        <thead><tr><th style="width:70px">CLO</th><th style="text-align:center">Assessment 1</th><th style="text-align:center">Assessment 2</th><th style="text-align:center">Assessment 3</th><th style="width:70px;text-align:right">Total</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600">CLO 1</td><td style="text-align:center"><span class="si" style="text-align:center">1</span></td><td style="text-align:center"><span class="si" style="text-align:center">2</span></td><td style="text-align:center"><span class="si" style="text-align:center">0</span></td><td style="text-align:right;font-weight:600">3.00</td></tr>
+          <tr><td style="font-weight:600">CLO 2</td><td style="text-align:center"><span class="si" style="text-align:center">0</span></td><td style="text-align:center"><span class="si" style="text-align:center">20</span></td><td style="text-align:center"><span class="si" style="text-align:center">100</span></td><td style="text-align:right;font-weight:600">120.00</td></tr>
+          <tr><td style="font-weight:600">CLO 3</td><td style="text-align:center"><span class="si" style="text-align:center">20</span></td><td style="text-align:center"><span class="si" style="text-align:center">30</span></td><td style="text-align:center"><span class="si" style="text-align:center">50</span></td><td style="text-align:right;font-weight:600">100.00</td></tr>
+          <tr><td style="font-weight:600">CLO 4</td><td style="text-align:center"><span class="si" style="text-align:center">1</span></td><td style="text-align:center"><span class="si" style="text-align:center">1</span></td><td style="text-align:center"><span class="si" style="text-align:center">1</span></td><td style="text-align:right;font-weight:600">3.00</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="g g-gold">
+    <div class="g-lbl">Key concept</div>
+    <p>The <strong>absolute numbers do not matter</strong>. Only the ratio between them for each CLO (each row) matters. For example, if CLO 1 is doubly important in Assessment 2 compared to Assessment 1, you could enter 1 and 2, or 10 and 20, or 30 and 60. The tool scales them&nbsp;proportionally.</p>
+    <p>A value of <strong>0</strong> means that CLO is not assessed in that&nbsp;assignment.</p>
+  </div>
+
+  <p style="color:var(--ink-light);margin:1.25rem 0 .5rem">Looking at the example above, read each <strong>row</strong> as describing how one CLO is distributed:</p>
+
+  <div class="tm" style="border-color:var(--accent);border-width:2px">
+    <div class="tm-body-sm">
+      <p style="font-size:.9rem;margin-bottom:.6rem"><strong>CLO 1</strong> row: values 1, 2, 0</p>
+      <div class="rd"><div class="rd-a" style="flex:1">A1: 1</div><div class="rd-b" style="flex:2">A2: 2</div></div>
+      <p style="font-size:.85rem;color:var(--ink-muted)">CLO 1 is not assessed in Assignment 3 (value is 0). Of the two assignments where it is assessed, Assignment 2 carries twice the importance. The ratio is&nbsp;1:2.</p>
+    </div>
+  </div>
+
+  <div class="g g-blue">
+    <div class="g-lbl">Other ways to consider the ratio</div>
+    <p>The simple ratio approach shown above is just one way to think about these values. There are other approaches that may feel more intuitive depending on how you think about progression of learning in your course. The next step outlines these&nbsp;alternatives.</p>
+  </div>
+
+  <div class="sf">
+    <button class="sb sb-prev" onclick="go(1)">← CLO Weightings</button>
+    <button class="sb sb-next" onclick="go(3)">Next: Approaches →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 3: Approaches ===== -->
+<div class="panel" id="s3">
+  <div class="sh">
+    <div class="sh-num">Step 4 of 6</div>
+    <h2>Approaches to Mapping</h2>
+    <p>There are several valid ways to think about the mapping values in Table 2. All of them are still essentially asking for a <strong>ratio</strong>. Choose whichever framing makes the most sense for how you think about each CLO's relationship to your assessments. It may be that certain CLOs are easier to consider using a particular approach, so you do not have to use the same approach throughout, but in most cases sticking with one approach will feel most&nbsp;natural.</p>
+  </div>
+
+  <div class="apps apps-1">
+    <div class="ac">
+      <h4>Approach A: Simple Ratio of Relative Importance</h4>
+      <p>If CLO 1 is doubly important in a later assessment compared to an earlier one, the ratio is 2:1. Focus purely on the relative weight of that CLO across&nbsp;tasks.</p>
+      <div class="ac-ex">CLO 1 across 3 assessments → &nbsp;1 : 2 : 0<br>(Not assessed in A3; twice as important in A2 as A1)</div>
+    </div>
+  </div>
+
+  <div class="apps apps-2">
+    <div class="ac ac-blue">
+      <h4>Approach B: How Much of the Domain Is Available</h4>
+      <p>A progression-of-learning approach. Indicate how much of the CLO's domain of skill is <strong>available to assess</strong> at the time of each&nbsp;assignment.</p>
+      <div class="ac-ex">A1: 20% (only basics taught so far)<br>A2: 60%<br>A3: 100% (full domain taught)</div>
+      <div class="rd" style="margin-top:.75rem"><div class="rd-a" style="flex:20">20%</div><div class="rd-b" style="flex:60">60%</div><div class="rd-c" style="flex:100">100%</div></div>
+    </div>
+    <div class="ac ac-purple">
+      <h4>Approach C: Which Part of the Outcome</h4>
+      <p>Also a progression approach, but more precise. Indicate <strong>which portion</strong> of the outcome is assessed in each assignment (each portion assessed&nbsp;once).</p>
+      <div class="ac-ex">A1: first 20% of the domain<br>A2: next 30%<br>A3: remaining 50%</div>
+      <div class="rd" style="margin-top:.75rem"><div class="rd-a" style="flex:20">20%</div><div class="rd-b" style="flex:30">30%</div><div class="rd-c" style="flex:50">50%</div></div>
+    </div>
+  </div>
+
+  <div class="apps apps-1">
+    <div class="ac ac-gold">
+      <h4>Approach D: Equally Weighted Skills</h4>
+      <p>When the outcome is made up of equally weighted skills and each assignment tests them individually, the ratio is simply 1:1 (two assignments) or 1:1:1 (three).</p>
+      <div class="ac-ex">CLO assessed in 3 assignments equally → &nbsp;1 : 1 : 1</div>
+    </div>
+  </div>
+
+  <div class="sf">
+    <button class="sb sb-prev" onclick="go(2)">← CLO Mapping</button>
+    <button class="sb sb-next" onclick="go(4)">Next: Evaluate Outputs →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 4: Evaluate Outputs ===== -->
+<div class="panel" id="s4">
+  <div class="sh">
+    <div class="sh-num">Step 5 of 6</div>
+    <h2>Evaluate the Outputs</h2>
+    <p>Once you have entered your estimates, the tool calculates two output tables. Remember that these outputs are themselves <strong>estimates</strong> based on your inputs. The question to ask yourself is: do these outputs broadly match your intuition? If the numbers are close to what you expected (within about 5%), that is fine. If there is a significant discrepancy, adjustments should be made to your inputs in Tables 1 and&nbsp;2.</p>
+  </div>
+
+  <!-- Table 3 -->
+  <div class="tm">
+    <div class="tm-bar"><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-title">Calculated Output</span></div>
+    <div class="tm-body">
+      <div class="ts-label"><span class="n">3.</span> Overall Course Contribution (%)</div>
+      <div class="ts-ul"></div>
+      <div class="ts-desc">Contribution of each CLO within each assessment towards the overall course grade.</div>
+      <table class="ot" aria-label="Overall course contribution output">
+        <thead><tr><th style="text-align:left;width:120px">CLO</th><th>Assessment 1</th><th>Assessment 2</th><th>Assessment 3</th></tr></thead>
+        <tbody>
+          <tr><td>CLO 1</td><td>10.00%</td><td>20.00%</td><td>0.00%</td></tr>
+          <tr><td>CLO 2</td><td>0.00%</td><td>5.00%</td><td class="hl">25.00%</td></tr>
+          <tr><td>CLO 3</td><td>4.00%</td><td>6.00%</td><td>10.00%</td></tr>
+          <tr><td>CLO 4</td><td>6.67%</td><td>6.67%</td><td>6.67%</td></tr>
+          <tr class="tot"><td>Assessment Total:</td><td>20.67%</td><td>37.67%</td><td>41.67%</td></tr>
+        </tbody>
+      </table>
+      <div class="ot grand"><strong>Grand Total: 100.00%</strong> &nbsp;(Should equal 100%)</div>
+    </div>
+  </div>
+
+  <div class="g g-purple">
+    <div class="g-lbl">What this tells you</div>
+    <p>The <strong>Assessment Total</strong> row shows the estimated weighting for each assessment. In this example: Assessment 1 ≈ 20.67%, Assessment 2 ≈ 37.67%, Assessment 3 ≈ 41.67%. Rounding to the nearest 5%, we would read these as approximately <strong>20%</strong>, <strong>40%</strong>, and <strong>40%</strong>.</p>
+    <p>Ask yourself: does an assessment weighting of roughly 20%, 40%, 40% match what you intended? If these are close to your intuition, the alignment is working. If there is a significant discrepancy, go back and adjust your inputs in Tables 1 and&nbsp;2.</p>
+  </div>
+
+  <!-- Table 4 -->
+  <div class="tm" style="margin-top:2rem">
+    <div class="tm-bar"><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-title">Calculated Output</span></div>
+    <div class="tm-body">
+      <div class="ts-label"><span class="n">4.</span> CLO Emphasis per Assessment (%)</div>
+      <div class="ts-ul"></div>
+      <div class="ts-desc">Percentage emphasis of each CLO within each individual assessment.</div>
+      <table class="ot" aria-label="CLO emphasis per assessment output">
+        <thead><tr><th style="text-align:left;width:120px">CLO</th><th>Assessment 1</th><th>Assessment 2</th><th>Assessment 3</th></tr></thead>
+        <tbody>
+          <tr><td>CLO 1</td><td class="hl">48.4%</td><td class="hl">53.1%</td><td>0.0%</td></tr>
+          <tr><td>CLO 2</td><td>0.0%</td><td>13.3%</td><td class="hl">60.0%</td></tr>
+          <tr><td>CLO 3</td><td>19.4%</td><td>15.9%</td><td>24.0%</td></tr>
+          <tr><td>CLO 4</td><td>32.3%</td><td>17.7%</td><td>16.0%</td></tr>
+          <tr class="tot"><td>Total per Assessment:</td><td class="c-green">100.0%</td><td class="c-green">100.0%</td><td class="c-green">100.0%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="g g-purple">
+    <div class="g-lbl">What this tells you</div>
+    <p>This table indicates the estimated <strong>CLO influence within each assessment's rubric</strong>. Read each column as one assessment's breakdown. For example, in Assessment 1, CLO 1 has roughly 50% influence. This does not mean there is a single criterion called "CLO 1" worth 50%. It means that whichever criteria are mapped to CLO 1 (whether that is one criterion or several), their combined weighting should account for approximately 50% of that assessment's&nbsp;marks.</p>
+    <p>The highlighted cells show where each CLO has its strongest influence. Ask yourself: does it make sense that CLO 1 dominates both Assessments 1 and 2? That CLO 2 dominates Assessment 3? If these are close to your intuition (within about 5%), the alignment is working. If there is a significant discrepancy,&nbsp;iterate.</p>
+  </div>
+
+  <div class="g g-gold" style="margin-top:1.5rem">
+    <div class="g-lbl">Remember: iterate</div>
+    <p>If the outputs do not match your intuition, the tool has identified a need to iterate and reconsider the inputs you provided. Go back and adjust your estimates in Tables 1 and 2. The next step explains how to make these&nbsp;adjustments.</p>
+  </div>
+
+  <div class="sf">
+    <button class="sb sb-prev" onclick="go(3)">← Approaches</button>
+    <button class="sb sb-next" onclick="go(5)">Next: How to Iterate →</button>
+  </div>
+</div>
+
+<!-- ===== STEP 5: How to Iterate ===== -->
+<div class="panel" id="s5">
+  <div class="sh">
+    <div class="sh-num">Step 6 of 6</div>
+    <h2>How to Iterate</h2>
+    <p>When the outputs do not match your intuition, you need to adjust your inputs. The tool updates all outputs instantly as you make changes, so you can see the effect of each adjustment in real&nbsp;time.</p>
+  </div>
+
+  <div class="g g-gold">
+    <div class="g-lbl">The core principle</div>
+    <p>To <strong>increase</strong> an assessment's total weighting, you need to <strong>borrow</strong> from one or more CLOs in one or more of the other assessments. To <strong>decrease</strong> an assessment's total, you redistribute some of its CLO values to other&nbsp;assessments.</p>
+  </div>
+
+  <div class="apps apps-1">
+    <div class="ac">
+      <h4>Adjusting Assessment Weightings (Table 3 outputs)</h4>
+      <p>If an assessment total is too low or too high, you have two levers:</p>
+      <p style="margin-top:.5rem"><strong>1. Adjust the CLO mapping table (Table 2).</strong> Change the values for one or more CLOs in the assessment you want to adjust. Increasing a value in one assessment column means that CLO's influence shifts towards that assessment. Because the total is proportional, this reduces its relative influence in other&nbsp;assessments.</p>
+      <p style="margin-top:.5rem"><strong>2. Adjust CLO weightings (Table 1).</strong> If a CLO that is heavily mapped to the assessment you want to increase is given a higher overall weighting, that assessment's total will&nbsp;rise.</p>
+    </div>
+  </div>
+
+  <div class="apps apps-1">
+    <div class="ac ac-purple">
+      <h4>Adjusting Rubric Composition (Table 4 outputs)</h4>
+      <p>If the CLO emphasis within a particular assessment's rubric is not what you intended, the same principle applies. To increase a CLO's share within an assessment, increase its raw value in that column of Table 2 (or decrease the values of other CLOs in that same column). The tool recalculates the proportions&nbsp;instantly.</p>
+    </div>
+  </div>
+
+  <div class="g g-green">
+    <div class="g-lbl">What to expect</div>
+    <p>As you adjust values, you will see all the output tables update in real time. Iteration should continue until the estimates are about right. Remember, you are working with estimates rounded to about 5%, so precision to the decimal point is not the&nbsp;goal.</p>
+    <p>It is normal to go back and forth several times. Each adjustment may shift other outputs, which is part of the process of understanding how the components of your course interact.</p>
+  </div>
+
+  <div class="g g-gold">
+    <div class="g-lbl">Why this matters beyond the tool</div>
+    <p>The adjustments you make here are not just numbers in a calculator. They have <strong>real implications for how your course is run</strong>. If the iteration process leads you to change assessment weightings, the teaching sequence will need to reflect that. For example, if an assessment's weighting increases, the teaching and learning activities that prepare students for that assessment may need more time, more scaffolding, or a different position in the&nbsp;sequence.</p>
+    <p>The tool helps you see these relationships before you commit to changes, so that your course design decisions are informed by the alignment between what you intend students to learn, how you assess that learning, and how you structure the teaching to support&nbsp;it.</p>
+  </div>
+
+  <!-- Video placeholder -->
+  <div style="margin:1.5rem 0;border:2px dashed var(--border);border-radius:var(--radius);background:var(--bg-warm);padding:3rem 1.5rem;text-align:center;color:var(--ink-muted)">
+    <div style="font-size:2.4rem;margin-bottom:.75rem;opacity:.5" aria-hidden="true">▶</div>
+    <p style="font-size:.95rem;max-width:420px;margin:0 auto"><strong style="color:var(--ink-light)">Video walkthrough: Iterating in Stream A</strong></p>
+    <p style="font-size:.9rem;max-width:420px;margin:.5rem auto;line-height:1.6">Watch how adjustments to the mapping table and CLO weightings affect the outputs in real time, and how to iterate until the alignment matches your&nbsp;intuition.</p>
+    <p style="margin-top:.8rem;font-size:.82rem;font-style:italic"><!-- Replace this div with your embedded video: <iframe src="your-video-url" ...></iframe> -->[Video embed placeholder]</p>
+  </div>
+
+  <div class="sf" style="flex-direction:column;gap:1rem;align-items:center;text-align:center">
+    <a href="https://mediaproduction.adelaide.edu.au/pace-interactives/#/clos" class="sb sb-go" target="_blank" rel="noopener">Open the Stream A Tool →</a>
+    <button class="sb sb-prev" onclick="go(4)" style="align-self:flex-start">← Evaluate Outputs</button>
+  </div>
+</div>
+
+</div></main>
+
+<footer class="ft"><div class="pw">
+  <p>The Alignment Construction Tool &middot; An educational research project</p>
+</div></footer>
+
+<script>
+const STEPS = ['Overview','CLO Weightings','CLO Mapping','Approaches','Evaluate','Iterate'];
+const nav = document.getElementById('nav');
+STEPS.forEach((label, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'sp' + (i === 0 ? ' on' : '');
+  btn.onclick = () => go(i);
+  btn.innerHTML = `<span class="sp-n">${i+1}</span><span class="sp-l">${label}</span>`;
+  btn.setAttribute('aria-label', `Step ${i+1}: ${label}`);
+  nav.appendChild(btn);
+});
+
+function go(n) {
+  document.querySelectorAll('.panel').forEach((p, i) => {
+    p.classList.toggle('on', i === n);
+  });
+  document.querySelectorAll('.sp').forEach((p, i) => {
+    p.classList.toggle('on', i === n);
+  });
+  window.scrollTo({ top: document.querySelector('.steps').offsetTop - 120, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
